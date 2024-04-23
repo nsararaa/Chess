@@ -8,6 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		91FD129B2BD76DD200AEDC0B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FD129A2BD76DD200AEDC0B /* main.cpp */; };
+		91FD12A32BD76DF000AEDC0B /* Chess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FD12A12BD76DF000AEDC0B /* Chess.cpp */; };
+		91FD12A62BD76DF900AEDC0B /* Piece.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FD12A42BD76DF900AEDC0B /* Piece.cpp */; };
+		91FD12A92BD76EE400AEDC0B /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FD12A72BD76EE400AEDC0B /* Player.cpp */; };
+		91FD12AC2BD76F1000AEDC0B /* King.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FD12AA2BD76F1000AEDC0B /* King.cpp */; };
+		91FD12AF2BD76F1D00AEDC0B /* Queen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FD12AD2BD76F1D00AEDC0B /* Queen.cpp */; };
+		91FD12B22BD76F2600AEDC0B /* Pawn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FD12B02BD76F2600AEDC0B /* Pawn.cpp */; };
+		91FD12B52BD76F3200AEDC0B /* Knight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FD12B32BD76F3200AEDC0B /* Knight.cpp */; };
+		91FD12B82BD76F3F00AEDC0B /* Bishop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FD12B62BD76F3F00AEDC0B /* Bishop.cpp */; };
+		91FD12BB2BD76F4800AEDC0B /* Rook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FD12B92BD76F4800AEDC0B /* Rook.cpp */; };
+		91FD12C22BD76FD200AEDC0B /* libsfml-graphics.2.6.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FD12BD2BD76FD200AEDC0B /* libsfml-graphics.2.6.1.dylib */; };
+		91FD12C32BD76FD200AEDC0B /* libsfml-network.2.6.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FD12BE2BD76FD200AEDC0B /* libsfml-network.2.6.1.dylib */; };
+		91FD12C42BD76FD200AEDC0B /* libsfml-audio.2.6.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FD12BF2BD76FD200AEDC0B /* libsfml-audio.2.6.1.dylib */; };
+		91FD12C52BD76FD200AEDC0B /* libsfml-window.2.6.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FD12C02BD76FD200AEDC0B /* libsfml-window.2.6.1.dylib */; };
+		91FD12C62BD76FD200AEDC0B /* libsfml-system.2.6.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FD12C12BD76FD200AEDC0B /* libsfml-system.2.6.1.dylib */; };
+		91FD12C92BD7704C00AEDC0B /* Board.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 91FD12C72BD7704C00AEDC0B /* Board.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +40,32 @@
 /* Begin PBXFileReference section */
 		91FD12972BD76DD200AEDC0B /* Chess */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Chess; sourceTree = BUILT_PRODUCTS_DIR; };
 		91FD129A2BD76DD200AEDC0B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		91FD12A12BD76DF000AEDC0B /* Chess.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Chess.cpp; sourceTree = "<group>"; };
+		91FD12A22BD76DF000AEDC0B /* Chess.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Chess.hpp; sourceTree = "<group>"; };
+		91FD12A42BD76DF900AEDC0B /* Piece.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Piece.cpp; sourceTree = "<group>"; };
+		91FD12A52BD76DF900AEDC0B /* Piece.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Piece.hpp; sourceTree = "<group>"; };
+		91FD12A72BD76EE400AEDC0B /* Player.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		91FD12A82BD76EE400AEDC0B /* Player.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
+		91FD12AA2BD76F1000AEDC0B /* King.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = King.cpp; sourceTree = "<group>"; };
+		91FD12AB2BD76F1000AEDC0B /* King.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = King.hpp; sourceTree = "<group>"; };
+		91FD12AD2BD76F1D00AEDC0B /* Queen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Queen.cpp; sourceTree = "<group>"; };
+		91FD12AE2BD76F1D00AEDC0B /* Queen.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Queen.hpp; sourceTree = "<group>"; };
+		91FD12B02BD76F2600AEDC0B /* Pawn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Pawn.cpp; sourceTree = "<group>"; };
+		91FD12B12BD76F2600AEDC0B /* Pawn.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Pawn.hpp; sourceTree = "<group>"; };
+		91FD12B32BD76F3200AEDC0B /* Knight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Knight.cpp; sourceTree = "<group>"; };
+		91FD12B42BD76F3200AEDC0B /* Knight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Knight.hpp; sourceTree = "<group>"; };
+		91FD12B62BD76F3F00AEDC0B /* Bishop.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Bishop.cpp; sourceTree = "<group>"; };
+		91FD12B72BD76F3F00AEDC0B /* Bishop.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Bishop.hpp; sourceTree = "<group>"; };
+		91FD12B92BD76F4800AEDC0B /* Rook.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Rook.cpp; sourceTree = "<group>"; };
+		91FD12BA2BD76F4800AEDC0B /* Rook.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Rook.hpp; sourceTree = "<group>"; };
+		91FD12BD2BD76FD200AEDC0B /* libsfml-graphics.2.6.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsfml-graphics.2.6.1.dylib"; path = "ExternalLibraries/SFML/lib/libsfml-graphics.2.6.1.dylib"; sourceTree = "<group>"; };
+		91FD12BE2BD76FD200AEDC0B /* libsfml-network.2.6.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsfml-network.2.6.1.dylib"; path = "ExternalLibraries/SFML/lib/libsfml-network.2.6.1.dylib"; sourceTree = "<group>"; };
+		91FD12BF2BD76FD200AEDC0B /* libsfml-audio.2.6.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsfml-audio.2.6.1.dylib"; path = "ExternalLibraries/SFML/lib/libsfml-audio.2.6.1.dylib"; sourceTree = "<group>"; };
+		91FD12C02BD76FD200AEDC0B /* libsfml-window.2.6.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsfml-window.2.6.1.dylib"; path = "ExternalLibraries/SFML/lib/libsfml-window.2.6.1.dylib"; sourceTree = "<group>"; };
+		91FD12C12BD76FD200AEDC0B /* libsfml-system.2.6.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libsfml-system.2.6.1.dylib"; path = "ExternalLibraries/SFML/lib/libsfml-system.2.6.1.dylib"; sourceTree = "<group>"; };
+		91FD12C72BD7704C00AEDC0B /* Board.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Board.cpp; sourceTree = "<group>"; };
+		91FD12C82BD7704C00AEDC0B /* Board.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Board.hpp; sourceTree = "<group>"; };
+		91FD12CA2BD7708700AEDC0B /* Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +73,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91FD12C22BD76FD200AEDC0B /* libsfml-graphics.2.6.1.dylib in Frameworks */,
+				91FD12C32BD76FD200AEDC0B /* libsfml-network.2.6.1.dylib in Frameworks */,
+				91FD12C42BD76FD200AEDC0B /* libsfml-audio.2.6.1.dylib in Frameworks */,
+				91FD12C52BD76FD200AEDC0B /* libsfml-window.2.6.1.dylib in Frameworks */,
+				91FD12C62BD76FD200AEDC0B /* libsfml-system.2.6.1.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +89,7 @@
 			children = (
 				91FD12992BD76DD200AEDC0B /* Chess */,
 				91FD12982BD76DD200AEDC0B /* Products */,
+				91FD12BC2BD76FD200AEDC0B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,8 +105,41 @@
 			isa = PBXGroup;
 			children = (
 				91FD129A2BD76DD200AEDC0B /* main.cpp */,
+				91FD12CA2BD7708700AEDC0B /* Util.h */,
+				91FD12A12BD76DF000AEDC0B /* Chess.cpp */,
+				91FD12A22BD76DF000AEDC0B /* Chess.hpp */,
+				91FD12C72BD7704C00AEDC0B /* Board.cpp */,
+				91FD12C82BD7704C00AEDC0B /* Board.hpp */,
+				91FD12A72BD76EE400AEDC0B /* Player.cpp */,
+				91FD12A82BD76EE400AEDC0B /* Player.hpp */,
+				91FD12A42BD76DF900AEDC0B /* Piece.cpp */,
+				91FD12A52BD76DF900AEDC0B /* Piece.hpp */,
+				91FD12AA2BD76F1000AEDC0B /* King.cpp */,
+				91FD12AB2BD76F1000AEDC0B /* King.hpp */,
+				91FD12AD2BD76F1D00AEDC0B /* Queen.cpp */,
+				91FD12AE2BD76F1D00AEDC0B /* Queen.hpp */,
+				91FD12B02BD76F2600AEDC0B /* Pawn.cpp */,
+				91FD12B12BD76F2600AEDC0B /* Pawn.hpp */,
+				91FD12B32BD76F3200AEDC0B /* Knight.cpp */,
+				91FD12B42BD76F3200AEDC0B /* Knight.hpp */,
+				91FD12B62BD76F3F00AEDC0B /* Bishop.cpp */,
+				91FD12B72BD76F3F00AEDC0B /* Bishop.hpp */,
+				91FD12B92BD76F4800AEDC0B /* Rook.cpp */,
+				91FD12BA2BD76F4800AEDC0B /* Rook.hpp */,
 			);
 			path = Chess;
+			sourceTree = "<group>";
+		};
+		91FD12BC2BD76FD200AEDC0B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				91FD12BF2BD76FD200AEDC0B /* libsfml-audio.2.6.1.dylib */,
+				91FD12BD2BD76FD200AEDC0B /* libsfml-graphics.2.6.1.dylib */,
+				91FD12BE2BD76FD200AEDC0B /* libsfml-network.2.6.1.dylib */,
+				91FD12C12BD76FD200AEDC0B /* libsfml-system.2.6.1.dylib */,
+				91FD12C02BD76FD200AEDC0B /* libsfml-window.2.6.1.dylib */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,7 +199,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91FD12B52BD76F3200AEDC0B /* Knight.cpp in Sources */,
+				91FD12B82BD76F3F00AEDC0B /* Bishop.cpp in Sources */,
+				91FD12AF2BD76F1D00AEDC0B /* Queen.cpp in Sources */,
+				91FD12A92BD76EE400AEDC0B /* Player.cpp in Sources */,
+				91FD12BB2BD76F4800AEDC0B /* Rook.cpp in Sources */,
+				91FD12A62BD76DF900AEDC0B /* Piece.cpp in Sources */,
+				91FD12B22BD76F2600AEDC0B /* Pawn.cpp in Sources */,
+				91FD12C92BD7704C00AEDC0B /* Board.cpp in Sources */,
+				91FD12A32BD76DF000AEDC0B /* Chess.cpp in Sources */,
 				91FD129B2BD76DD200AEDC0B /* main.cpp in Sources */,
+				91FD12AC2BD76F1000AEDC0B /* King.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +329,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "${SRCROOT}/ExternalLibraries/SFML/include";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ExternalLibraries/SFML/lib",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -247,6 +343,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "${SRCROOT}/ExternalLibraries/SFML/include";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/ExternalLibraries/SFML/lib",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
