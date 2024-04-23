@@ -15,7 +15,7 @@ class Board;
 class Knight:public Piece{
     sf::Texture tKnight[2];
     sf::Sprite knight[4];
-    
+    Board *b;
     
    void init(){
         tKnight[0].loadFromFile("/Users/saranoor/Downloads/Xcode/Chess disp/pieces-basic-png/wKnight.png");
@@ -41,7 +41,7 @@ protected:
         color == Black? window->draw(knight[id+2]):window->draw(knight[id]);
     }
 public:
-    Knight(Color _col,Position _p, Board * _b, int _id): Piece(_col, _p, _id){
+    Knight(Color _col,Position _p, Board * _b, int _id): Piece(_col, _p, _id), b(_b){
         init();
     }
     
@@ -54,6 +54,7 @@ public:
        // draw(window, id);
     }
 
+    bool isLegal(Position dest);
 };
 
 

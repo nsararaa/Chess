@@ -61,6 +61,7 @@ public:
         draw(window, id);
     }
 
+    bool isLegal(Position dest);
 
 };
 #endif /* Pawn_hpp */

@@ -18,6 +18,7 @@ class Rook:public Piece{
     sf::Texture tRook[2];
     sf::Sprite rook[4];
     
+    Board *b;
     
    void init(){
         tRook[0].loadFromFile("/Users/saranoor/Downloads/Xcode/Chess disp/pieces-basic-png/wRook.png");
@@ -46,7 +47,7 @@ protected:
             window->draw(rook[id+2]);
     }
 public:
-    Rook(Color _col,Position _p, Board * _b, int _id): Piece(_col, _p, _id){
+    Rook(Color _col,Position _p, Board * _b, int _id): Piece(_col, _p, _id), b(_b){
         init();
     }
     
@@ -60,6 +61,7 @@ public:
        // draw(window, id);
     }
 
+    bool isLegal(Position dest);
 };
 
 

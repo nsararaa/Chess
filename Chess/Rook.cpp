@@ -9,4 +9,7 @@
 #include "Board.hpp"
 
 
+bool Rook::isLegal(Position dest){
+    return (isVertMove(pos, dest) && b->isVerticalPathClear(pos, dest)) || (isHoriMove(pos, dest) && b->isHorizontalPathClear(pos, dest));
+}
 

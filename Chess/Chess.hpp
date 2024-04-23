@@ -93,14 +93,14 @@ public:
            pollEvent();
 
             turnMsg(turn);
-          //  do{
+            do{
                 do{
                     do{
                         selectPos("Source",src);
                     }while(!isValidSrc(turn));
                     selectPos("Destination", dest);
                 }while(!isValidDst(turn));
-//            }while (!b.pieceAt(src)->isLegal(dest));
+            }while (!b.pieceAt(src)->isLegal(dest));
 
             int id = b.pieceAt(src)->getId();
             b.move(src, dest, window);

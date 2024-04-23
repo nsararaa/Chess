@@ -57,6 +57,7 @@ public:
        // draw(window, id);
     }
 
+    bool isLegal(Position dest);
     
 };
 

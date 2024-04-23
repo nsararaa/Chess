@@ -46,6 +46,8 @@ public:
             queen[id+1].setPosition(100*dst.C, 100*dst.R);
      //   draw(window, id);
     }
+    
+    bool isLegal(Position dest);
 
    
 };

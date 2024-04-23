@@ -7,3 +7,8 @@
 
 #include "Queen.hpp"
 #include "Board.hpp"
+
+
+bool Queen::isLegal(Position dest){
+    return ((isVertMove(pos, dest) && b->isVerticalPathClear(pos, dest)) || (isHoriMove(pos, dest) && b->isHorizontalPathClear(pos, dest))) || (isDiagMove(pos, dest) && ( b->isDiagLtoRPathClear(pos, dest) || b->isDiagRtoLPathClear(pos, dest)));
+}

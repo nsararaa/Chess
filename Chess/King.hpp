@@ -48,7 +48,7 @@ public:
        // draw(window, id);
     }
 
-   // bool isLegal(Position dest);
+    bool isLegal(Position dest);
 };
 
 #endif /* King_hpp */

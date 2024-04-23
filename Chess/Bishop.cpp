@@ -7,3 +7,8 @@
 
 #include "Bishop.hpp"
 #include "Board.hpp"
+
+
+bool Bishop::isLegal(Position dest){
+    return isDiagMove(pos, dest) && ( b->isDiagLtoRPathClear(pos, dest) || b->isDiagRtoLPathClear(pos, dest));
+}

@@ -62,9 +62,7 @@ public:
     
     virtual void setBoardPos(sf::RenderWindow* window, Position dst, int id)=0;
    
-    virtual bool isLegal(Position dest){
-        return true;
-    }
+    virtual bool isLegal(Position dest)=0;
     
 };
 #endif /* Piece_hpp */
