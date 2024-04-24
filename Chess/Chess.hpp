@@ -19,7 +19,7 @@ class Chess{
     Position src, dest;
     int turn;
     Board b;
-    
+    bool HPs[8][8] {};
     
     //display
     sf::RenderWindow* window;
@@ -35,9 +35,6 @@ public:
         Ps[1] = new Player("Manal", White);
         turn = White;
             
-            
-        
-        
         
         VidMode.width =1400;
         VidMode.height = 800;
@@ -84,6 +81,73 @@ public:
     
     
     
+    void highlight(Board b, Position src, bool HPs[][8], int turn){
+        for(int r=0; r < 8; r++){
+            for(int c=0; c < 8; c++){
+                HPs[r][c] = (b.pieceAt(src)->isLegal({r,c}));
+                //HPs[r][c] = (b.pieceAt(src)->isLegal({r,c}) && b.pieceAt({r,c})->getColor()!= turn);
+            }
+        }
+
+    }
+    
+    void printHighlightConsole(bool HPs[][8]){
+        std::cout << std::endl;
+        for(int r=0; r < 8; r++){
+            for(int c=0; c < 8; c++){
+                std::cout << HPs[r][c] << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+    
+    Position findKing(Board b, int turn){
+        for(int r=0; r < 8; r++){
+            for(int c=0; c < 8; c++){
+                if(b.pieceAt({r,c})->amIKing() && b.pieceAt({r,c})->getColor() == turn)
+                    return {r,c};
+            }
+        }
+        return {0,0};
+    }
+    
+    bool check(Board b, int turn){
+           Position kingPos;
+           turnChange(turn);
+           kingPos = findKing(b, turn);
+           turnChange(turn);
+           
+           for(int r=0; r < 8; r++){
+               for(int c =0; c < 8; c++){
+                   if(b.pieceAt({r,c})->isLegal(kingPos) && isValidSrc(turn))
+                       return true;
+               }
+           }
+           return false;
+    }
+    bool selfCheck(){
+        turnChange(turn);
+        return check(b, turn);
+    }
+
+
+    
+    
+    bool checkmate(Position src){
+        if(check(b, turn)){
+            for(int r=0; r < 8; r++){
+                for(int c=0; c < 8; c++){
+                    if(b.pieceAt(src)->isLegal(src))
+                        return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    
+    
     void play(){
         
         b.drawBoard(window);
@@ -98,21 +162,37 @@ public:
                     do{
                         selectPos("Source",src);
                     }while(!isValidSrc(turn));
+                    
+                    highlight(b, src, HPs, turn);
+                    printHighlightConsole(HPs);
+                    b.printHighlightWindow(HPs);
+                    
+                    b.drawBoard(window);
+                    b.drawBoardState(window);
+                    window->display();
+                   
+                
+                    
+                    
                     selectPos("Destination", dest);
                 }while(!isValidDst(turn));
-            }while (!b.pieceAt(src)->isLegal(dest));
+                b.unhighlight(HPs);
+                
+                b.drawBoard(window);
+                b.drawBoardState(window);
+                window->display();
+            //}while (!b.pieceAt(src)->isLegal(dest));
+            }while (!HPs[dest.R][dest.C]);
 
-            int id = b.pieceAt(src)->getId();
+        
             b.move(src, dest, window);
             b.drawBoard(window);
             b.drawBoardState(window);
             window->display();
+           
             
             
             turnChange(turn);
-            
-            
-            
         }
     }
     

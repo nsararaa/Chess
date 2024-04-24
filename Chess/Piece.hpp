@@ -38,6 +38,7 @@ protected:
         return true;
     }
     
+
     
 private:
   
@@ -61,8 +62,11 @@ public:
     }
     
     virtual void setBoardPos(sf::RenderWindow* window, Position dst, int id)=0;
-   
     virtual bool isLegal(Position dest)=0;
+    virtual bool amIKing(){
+        return false;
+    }
+    
     
 };
 #endif /* Piece_hpp */

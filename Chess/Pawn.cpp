@@ -13,7 +13,8 @@ bool Pawn::isLegal(Position dest){
     int dR = abs(pos.R - dest.R);
     if (b->pieceAt(pos)->getColor() == Black) {
         if (isFirstMove){ //first move
-            isFirstMove = false;
+            setIsFirstMove();
+            //isFirstMove = false;
             return isVertMove(pos,dest) && (pos.R > dest.R) && ((dR == 1) || (dR == 2));
         }
         else
@@ -21,7 +22,8 @@ bool Pawn::isLegal(Position dest){
     }
     else { // smal letters 1-2 //black
         if (isFirstMove){
-            isFirstMove = false;
+            setIsFirstMove();
+           // isFirstMove = false;
             return isVertMove(pos, dest) && (pos.R < dest.R) && ((dR == 1) || (dR == 2));
         }
         else

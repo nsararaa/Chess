@@ -60,27 +60,21 @@ void Chess::pollEvent(){
 }
 
 
-
-
-
-
-
-
-
-
-
 void Chess::turnMsg(int turn) {
     std::cout << Ps[turn]->getName() << "'s (" << (Ps[turn]->getColor() == Black ? "Black" : "White") << ") turn: " << std::endl;
 }
 
 bool Chess::isValidSrc(int turn){
-    return src.R <=7 && src.C <=7 && src.R >=0 && src.C >=0&& Ps[turn]->getColor() == turn;
+    if(b.pieceAt(src) != nullptr)
+        return src.R <=7 && src.C <=7 && src.R >=0 && src.C >=0&& b.pieceAt(src)->getColor() == turn;
+    return false;
 }
+
 bool Chess::isValidDst(int turn){
-    int i = Ps[turn]->getColor();
-    turnChange(turn);
-    
-    return dest.R <=7 && dest.C <=7 && dest.R >=0 && dest.C >=0 && i != turn;
+    if(b.pieceAt(dest) != nullptr){
+        return dest.R <=7 && dest.C <=7 && dest.R >=0 && dest.C >=0 && b.pieceAt(dest)->getColor()!= turn;
+    }
+    return dest.R <=7 && dest.C <=7 && dest.R >=0 && dest.C >=0;
 }
 
 void Chess::turnChange(int &turn){

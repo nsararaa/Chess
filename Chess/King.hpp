@@ -48,6 +48,9 @@ public:
        // draw(window, id);
     }
 
+    bool amIKing(){
+        return true;
+    }
     bool isLegal(Position dest);
 };
 

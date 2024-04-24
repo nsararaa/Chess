@@ -31,7 +31,8 @@ public:
         initBoardDisplay();
     }
     
-    
+    void unhighlight( bool HPs[][8]);
+    void printHighlightWindow(bool HPs[][8]);
     void drawBoard(sf::RenderWindow* window);
     void drawBoardState(sf::RenderWindow* window);
     void initBoxDisplay(sf::RectangleShape& box, sf::Color bgCol, sf::Color outLineCol, Position p);
@@ -40,9 +41,7 @@ public:
    
    
 
-    
-    
-    
+   
     Color getColor(int r, int c){
         return Bs[r][c]->getColor();
     }
