@@ -35,7 +35,7 @@ public:
     void printHighlightWindow(bool HPs[][8]);
     void drawBoard(sf::RenderWindow* window);
     void drawBoardState(sf::RenderWindow* window);
-    void initBoxDisplay(sf::RectangleShape& box, sf::Color bgCol, sf::Color outLineCol, Position p);
+    void initBoxDisplay(sf::RectangleShape& box, sf::Color bgCol, Position p);
     void initBoardDisplay();
     
    

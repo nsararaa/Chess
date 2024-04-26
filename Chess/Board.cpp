@@ -20,17 +20,18 @@ void Board::drawBoardState(sf::RenderWindow* window){
     }
 }
 
-void Board::initBoxDisplay(sf::RectangleShape& box, sf::Color bgCol, sf::Color outLineCol, Position p){
+void Board::initBoxDisplay(sf::RectangleShape& box, sf::Color bgCol, Position p){
     box.setSize(sf::Vector2f(100.f,100.f));
     box.setFillColor(bgCol);
-    box.setOutlineColor(outLineCol);
+    box.setOutlineColor(sf::Color::Black);
+    box.setOutlineThickness(1.f);
     box.setPosition(p.C, p.R);
 }
 void Board::printHighlightWindow( bool HPs[][8]){
     for(int r =0; r < 8; r++){
         for(int c =0; c < 8; c++){
             if(HPs[r][c]){
-                initBoxDisplay(board[r][c],sf::Color::Yellow, sf::Color::Black, {r*100, c*100});
+                initBoxDisplay(board[r][c],sf::Color::Yellow,{r*100, c*100});
             }
         }
     }
@@ -46,15 +47,15 @@ void Board::unhighlight( bool HPs[][8]){
                 p.C = c*100;
                 if(r == 0 || r == 2||r ==4 || r==6 ){
                     if(c == 0 || c == 2||c ==4 || c==6)
-                        initBoxDisplay(board[r][c],sf::Color::White, sf::Color::Black, {r*100, c*100});
+                        initBoxDisplay(board[r][c],sf::Color::White, {r*100, c*100});
                     else
-                        initBoxDisplay(board[r][c],Grey, sf::Color::White, {r*100, c*100});
+                        initBoxDisplay(board[r][c],Grey,{r*100, c*100});
                 }
                 else if(r == 1 || r == 3||r ==5 || r==7 ){
                     if(c == 1 || c == 3||c ==5 || c==7)
-                        initBoxDisplay(board[r][c],sf::Color::White, sf::Color::White, {r*100, c*100});
+                        initBoxDisplay(board[r][c],sf::Color::White,{r*100, c*100});
                     else
-                        initBoxDisplay(board[r][c],Grey, sf::Color::Black, {r*100, c*100});
+                        initBoxDisplay(board[r][c],Grey, {r*100, c*100});
                 }
             }
         }
@@ -76,15 +77,15 @@ void Board::initBoardDisplay(){
         for(int c=0; c < 8; c++){
             if(r == 0 || r == 2||r ==4 || r==6 ){
                 if(c == 0 || c == 2||c ==4 || c==6)
-                    initBoxDisplay(board[r][c],sf::Color::White, sf::Color::Black, {r*100, c*100});
+                    initBoxDisplay(board[r][c],sf::Color::White, {r*100, c*100});
                 else
-                    initBoxDisplay(board[r][c],Grey, sf::Color::White, {r*100, c*100});
+                    initBoxDisplay(board[r][c],Grey,  {r*100, c*100});
             }
             else if(r == 1 || r == 3||r ==5 || r==7 ){
                 if(c == 1 || c == 3||c ==5 || c==7)
-                    initBoxDisplay(board[r][c],sf::Color::White, sf::Color::White, {r*100, c*100});
+                    initBoxDisplay(board[r][c],sf::Color::White, {r*100, c*100});
                 else
-                    initBoxDisplay(board[r][c],Grey, sf::Color::Black, {r*100, c*100});
+                    initBoxDisplay(board[r][c],Grey,  {r*100, c*100});
             }
         }
     }
@@ -143,47 +144,31 @@ void Board::createPieces(){
 
 
 bool Board::isVerticalPathClear(Position s, Position d) {
-    if (s.C != d.C) {
-        return false;
+    int rS = 0, rE = 0;
+    if (s.R < d.R) { /// up-> down
+        rS = s.R + 1; rE = d.R;
     }
-
-    int start, end;
-        if(s.R <= d.R){
-           start = s.R;
-           end = d.R;}
-        else {
-            start = d.R;
-            end = s.R;
-        }
-    for (int r = start+1; r <= end; r++) {
-        if (Bs[r][s.C] != nullptr) {
+    else if (s.R > d.R) {/// down -> up
+        rS = d.R; rE = s.R - 1;
+    }
+    for (int r = rS; r <= rE; r++) {
+        if (Bs[r][d.C] != nullptr)
             return false;
-        }
     }
-    
     return true;
 }
 
 bool Board::isHorizontalPathClear(Position s, Position d) {
-    if (s.R != d.R) {
-        return false;
-    }
- 
-
-    int start, end;
-
-    if(s.C < d.C){
-          start = s.C;
-          end = d.C;}
-      else {
-          start = d.C;
-          end = s.C;}
+        int cS, cE;
+        if(s.C <d.C){ /// ----------->
+            cS=s.C+1; cE = d.C-1;}
+        else{/// <---------
+            cS=d.C+1; cE = s.C-1;} //CHECK
     
-    for (int c = start+1; c <= end; c++) {
-        if (Bs[s.R][c] != nullptr) {
-            return false;
+        for(int c= cS; c <=cE; c++){
+            if(Bs[d.R][c] != nullptr)
+                return false;
         }
-    }
 
     return true;
 }

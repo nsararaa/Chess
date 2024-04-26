@@ -80,3 +80,56 @@ bool Chess::isValidDst(int turn){
 void Chess::turnChange(int &turn){
     turn == White? turn =Black: turn =White;
 }
+
+
+
+
+
+
+void Chess::selectPos(std::string Msg, Position& pos){
+    std:: cout << "Enter " << Msg << " coordinates: ";
+   // std::cin >> pos.R >> pos.C;
+    //pos.R--;
+    //pos.C--;
+    sf::Vector2i mP;
+    mouseInput(mP);
+    pos.R = mP.y/100;
+    pos.C = mP.x/100;
+    
+    
+}
+
+
+
+Position Chess::convertPosToBoard(Position& Pos) {
+    Pos.C /= 100,Pos.R /=100;
+    return Pos;
+}
+Position Chess::convertPosToWindow(Position& Pos) {
+    Pos.R*=100, Pos.C*=100;
+    return Pos;
+}
+
+
+
+void Chess::highlight(Board b, Position src, bool HPs[][8], int turn){
+    for(int r=0; r < 8; r++){
+        for(int c=0; c < 8; c++){
+            if(b.pieceAt({r,c}) != nullptr) //square is occupied //check for opposite clr
+                HPs[r][c] = (b.pieceAt(src)->isLegal({r,c}) && b.pieceAt({r,c})->getColor()!= turn);
+            else //square is unoccupied
+                HPs[r][c] = (b.pieceAt(src)->isLegal({r,c}));
+        }
+    }
+
+}
+
+void Chess::printHighlightConsole(bool HPs[][8]){
+    std::cout << std::endl;
+    for(int r=0; r < 8; r++){
+        for(int c=0; c < 8; c++){
+            std::cout << HPs[r][c] << " ";
+        }
+        std::cout << std::endl;
+    }
+}

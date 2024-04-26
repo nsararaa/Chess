@@ -47,59 +47,19 @@ public:
     void pollEvent();
     void mouseInput(sf::Vector2i& mousePosition);
     
-    
     bool isValidSrc(int turn);
     bool isValidDst(int turn);
     void turnMsg(int turn);
     void turnChange(int &turn);
+    void selectPos(std::string Msg, Position& pos);
     
-    
-    
-    void selectPos(std::string Msg, Position& pos){
-        std:: cout << "Enter " << Msg << " coordinates: ";
-       // std::cin >> pos.R >> pos.C;
-        //pos.R--;
-        //pos.C--;
-        sf::Vector2i mP;
-        mouseInput(mP);
-        pos.R = mP.y/100;
-        pos.C = mP.x/100;
-        
-        
-    }
-    
-    
-    
-    Position convertPosToBoard(Position& Pos) {
-        Pos.C /= 100,Pos.R /=100;
-        return Pos;
-    }
-    Position convertPosToWindow(Position& Pos) {
-        Pos.R*=100, Pos.C*=100;
-        return Pos;
-    }
-    
-    
-    
-    void highlight(Board b, Position src, bool HPs[][8], int turn){
-        for(int r=0; r < 8; r++){
-            for(int c=0; c < 8; c++){
-                HPs[r][c] = (b.pieceAt(src)->isLegal({r,c}));
-                //HPs[r][c] = (b.pieceAt(src)->isLegal({r,c}) && b.pieceAt({r,c})->getColor()!= turn);
-            }
-        }
+    Position convertPosToBoard(Position& Pos);
+    Position convertPosToWindow(Position& Pos);
 
-    }
+    void highlight(Board b, Position src, bool HPs[][8], int turn);
+    void printHighlightConsole(bool HPs[][8]); //UTILITY REMOVE
     
-    void printHighlightConsole(bool HPs[][8]){
-        std::cout << std::endl;
-        for(int r=0; r < 8; r++){
-            for(int c=0; c < 8; c++){
-                std::cout << HPs[r][c] << " ";
-            }
-            std::cout << std::endl;
-        }
-    }
+    
     
     Position findKing(Board b, int turn){
         for(int r=0; r < 8; r++){
@@ -119,19 +79,19 @@ public:
            
            for(int r=0; r < 8; r++){
                for(int c =0; c < 8; c++){
-                   if(b.pieceAt({r,c})->isLegal(kingPos) && isValidSrc(turn))
+                   if(b.pieceAt({r,c}) != nullptr && b.pieceAt({r,c})->isLegal(kingPos) && isValidSrc(turn))
                        return true;
                }
            }
            return false;
     }
+    
     bool selfCheck(){
         turnChange(turn);
         return check(b, turn);
     }
 
 
-    
     
     bool checkmate(Position src){
         if(check(b, turn)){
@@ -172,9 +132,13 @@ public:
                     window->display();
                    
                 
-                    
-                    
                     selectPos("Destination", dest);
+                    
+                    
+//                    if(selfCheck()){
+//                        std::cout << "Selfcheck" << std::endl;
+//                        continue;
+//                    }
                 }while(!isValidDst(turn));
                 b.unhighlight(HPs);
                 
@@ -186,11 +150,20 @@ public:
 
         
             b.move(src, dest, window);
+            
+            
+//            if (check(b, turn)) {
+//                std::cout << "Check" << std::endl;
+//            }
+            
             b.drawBoard(window);
             b.drawBoardState(window);
             window->display();
            
-            
+//            if (checkmate(src)) {
+//                std::cout << "Checkmate \nGame over." << std::endl;
+//                window->close();
+//            }
             
             turnChange(turn);
         }

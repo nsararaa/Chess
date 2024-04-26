@@ -53,16 +53,17 @@ public:
     }
     
     void setBoardPos(sf::RenderWindow* window, Position dst, int id){
-       // dst.R++, dst.C++;
-        //setIsFirstMove();
+
         if(color==White) pawn[id].setPosition(100*dst.C, 100*dst.R);
         else
             pawn[id+8].setPosition(100*dst.C, 100*dst.R);
         draw(window, id);
     }
 
-    void setIsFirstMove(){
-        if(pos.R >1)
+    void setIsFirstMove(Color col){
+        if(pos.R >1 && col == White)
+            isFirstMove = false;
+        if(pos.R < 6 && col == Black)
             isFirstMove = false;
     }
     
