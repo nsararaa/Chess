@@ -11,7 +11,7 @@
 #include <SFML/Graphics.hpp>
 #include "Player.hpp"
 #include "Board.hpp"
-
+#include <fstream>
 
 class Chess{
   
@@ -59,48 +59,17 @@ public:
     void highlight(Board b, Position src, bool HPs[][8], int turn);
     void printHighlightConsole(bool HPs[][8]); //UTILITY REMOVE
     
-    
-    
-    Position findKing(Board b, int turn){
-        for(int r=0; r < 8; r++){
-            for(int c=0; c < 8; c++){
-                if(b.pieceAt({r,c}) != nullptr)
-                    if(b.pieceAt({r,c})->amIKing() && b.pieceAt({r,c})->getColor() == turn)
-                        return {r,c};
-            }
-        }
-        return {0,0};
-    }
-    
-    bool isValidSrc(Position src, int turn){
-        if(b.pieceAt(src) != nullptr)
-            return src.R <=7 && src.C <=7 && src.R >=0 && src.C >=0&& b.pieceAt(src)->getColor() == turn;
-        return false;
-    }
-
-    int i =0;
-    bool check(Board b, int turn){
-           Position kingPos;
-           turnChange(turn);
-           kingPos = findKing(b, turn);
-           turnChange(turn);
-   
-           for(int r=0; r < 8; r++){
-               for(int c =0; c < 8; c++){
-                   if(b.pieceAt({r,c}) != nullptr)
-                       if(b.pieceAt({r,c})->isLegal(kingPos) && isValidSrc({r,c}, turn))
-                           return true;
-               }
-           }
-           return false;
-    }
-    
+    Position findKing(Board b, int turn);
+    bool check(Board b, int turn);
+    bool isValidSrc(Position src, int turn);
     bool selfCheck(){
         turnChange(turn);
         return check(b, turn);
     }
 
 
+    
+    
     
     bool checkmate(Position src){
         if(check(b, turn)){
@@ -130,16 +99,61 @@ public:
         moves.push_back({s,d});
     }
     
-    void undo(std::vector <Move> &moves, sf::RenderWindow* w){
+    void undo(std::vector <Move> &moves){
         Move lastMove = moves.back();
         moves.pop_back();
-        b.move(lastMove.dst, lastMove.src, w);
+        b.move(lastMove.dst, lastMove.src);
     }
     
+    
+    void saveToFile(){
+        std::ofstream Wtr("/Users/saranoor/Downloads/Xcode/Chess/Chess/chessState.txt");
+        for(int r=0; r < 8; r++){
+            for(int c=0; c <8; c++){
+                Piece* piece = b.pieceAt({r, c});
+                if(piece != nullptr){
+                    Position p = piece->getPosition();
+                    Wtr << piece->getId() << " " << (piece->getColor()== Black?'B':'W') << " " << p.R << " "<< p.C << std::endl;
+                }
+            }
+        }
+        
+    }
+    
+    void loadFromFile(){
+        std::ifstream Rdr("/Users/saranoor/Downloads/Xcode/Chess/Chess/chessState.txt");
+        
+        
+        while(Rdr){
+            Color color;
+            char col;
+            int id;
+            Position p;
+            Rdr >> id;
+            Rdr >> col;
+            Rdr >> p.R;
+            Rdr >> p.C;
+            Piece *piece = b.pieceAt(p);
+            
+            piece->setId(id);
+            piece->setColor(col == 'B'? Black:White);
+            piece->setPos(p);
+        }
+    }
     
     void play(){
         std::vector <Move> moves;
         bool checkB=false;
+        char Undo = 'n', saveFile = 'n', loadFile = 'n';
+        
+        if(loadFile == 'n'){
+            b.initBoardDisplay();
+            b.createPieces();
+        }
+        else{
+            loadFromFile();
+        }
+        
         b.drawBoard(window);
         b.drawBoardState(window);
         window->display();
@@ -182,8 +196,9 @@ public:
             //}while (!b.pieceAt(src)->isLegal(dest));
             }while (!HPs[dest.R][dest.C]);
 
+            
         
-            b.move(src, dest, window);
+            b.move(src, dest);
             
 
 //            if (check(b, turn)) {
@@ -191,10 +206,21 @@ public:
 //                checkB = true;
 //            }
 
+            
             b.drawBoard(window);
             b.drawBoardState(window);
             window->display();
            
+            
+          //  std::cin >> Undo;
+            if(Undo == 'y'){
+                undo(moves);
+                b.drawBoard(window);
+                b.drawBoardState(window);
+                window->display();
+               
+                turnChange(turn);
+            }
 //            if (checkmate(src)) {
 //                std::cout << "Checkmate \nGame over." << std::endl;
 //                window->close();

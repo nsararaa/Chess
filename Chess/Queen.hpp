@@ -39,12 +39,11 @@ public:
     Queen(Color _col,Position _p, Board * _b, int _id):b(_b), Piece(_col, _p, _id){
         init();
     }
-    void setBoardPos(sf::RenderWindow* window, Position dst, int id){
+    void setBoardPos(Position dst, int id){
         if(color ==White)
             queen[id].setPosition(100*dst.C, 100*dst.R);
         else
             queen[id+1].setPosition(100*dst.C, 100*dst.R);
-     //   draw(window, id);
     }
     
     bool isLegal(Position dest);

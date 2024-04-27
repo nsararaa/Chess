@@ -38,6 +38,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		919E374D2BDCFEFD008533CE /* chessState.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = chessState.txt; sourceTree = "<group>"; };
 		91FD12972BD76DD200AEDC0B /* Chess */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Chess; sourceTree = BUILT_PRODUCTS_DIR; };
 		91FD129A2BD76DD200AEDC0B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		91FD12A12BD76DF000AEDC0B /* Chess.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Chess.cpp; sourceTree = "<group>"; };
@@ -126,6 +127,7 @@
 				91FD12B72BD76F3F00AEDC0B /* Bishop.hpp */,
 				91FD12B92BD76F4800AEDC0B /* Rook.cpp */,
 				91FD12BA2BD76F4800AEDC0B /* Rook.hpp */,
+				919E374D2BDCFEFD008533CE /* chessState.txt */,
 			);
 			path = Chess;
 			sourceTree = "<group>";

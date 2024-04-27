@@ -19,8 +19,6 @@ protected:
     Color color;
     Position pos;
     int id;
-     //polymorph
-    
     
    static bool isHoriMove(Position s, Position d){
         return s.R == d.R && s.C != d.C;
@@ -44,24 +42,42 @@ private:
   
 
 public:
-    Color getColor(){
-        return color;
-    }
+
     virtual void print(){
         
     }
+    
     virtual void draw(sf::RenderWindow* window, int id)=0;
     Piece(Color _col,Position _p, int _id): color(_col), pos(_p), id(_id){}
     
+    
+    void setColor(Color _c){
+        color = _c;
+    }
+    void setId(int _id){
+        id = _id;
+    }
     void setPos(Position dest){
         pos=dest;
     }
     
+    
+    //GETTERS
+    
     int getId(){
         return id;
     }
+    Color getColor(){
+        return color;
+    }
+    Position getPosition(){
+        return pos;
+    }
     
-    virtual void setBoardPos(sf::RenderWindow* window, Position dst, int id)=0;
+    
+    
+    
+    virtual void setBoardPos(Position dst, int id)=0;
     virtual bool isLegal(Position dest)=0;
     virtual bool amIKing(){
         return false;
@@ -71,5 +87,3 @@ public:
 };
 #endif /* Piece_hpp */
 
-
-//rookW, knightW, bishop

@@ -52,12 +52,11 @@ public:
         init();
     }
     
-    void setBoardPos(sf::RenderWindow* window, Position dst, int id){
+    void setBoardPos(Position dst, int id){
 
         if(color==White) pawn[id].setPosition(100*dst.C, 100*dst.R);
         else
             pawn[id+8].setPosition(100*dst.C, 100*dst.R);
-        draw(window, id);
     }
 
     void setIsFirstMove(Color col){

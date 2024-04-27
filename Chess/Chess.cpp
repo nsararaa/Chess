@@ -133,3 +133,40 @@ void Chess::printHighlightConsole(bool HPs[][8]){
         std::cout << std::endl;
     }
 }
+
+
+
+
+Position Chess::findKing(Board b, int turn){
+    for(int r=0; r < 8; r++){
+        for(int c=0; c < 8; c++){
+            if(b.pieceAt({r,c}) != nullptr)
+                if(b.pieceAt({r,c})->amIKing() && b.pieceAt({r,c})->getColor() == turn)
+                    return {r,c};
+        }
+    }
+    return {0,0};
+}
+
+bool Chess::isValidSrc(Position src, int turn){
+    if(b.pieceAt(src) != nullptr)
+        return src.R <=7 && src.C <=7 && src.R >=0 && src.C >=0&& b.pieceAt(src)->getColor() == turn;
+    return false;
+}
+
+int i =0;
+bool Chess::check(Board b, int turn){
+       Position kingPos;
+       turnChange(turn);
+       kingPos = findKing(b, turn);
+       turnChange(turn);
+
+       for(int r=0; r < 8; r++){
+           for(int c =0; c < 8; c++){
+               if(b.pieceAt({r,c}) != nullptr)
+                   if(b.pieceAt({r,c})->isLegal(kingPos) && isValidSrc({r,c}, turn))
+                       return true;
+           }
+       }
+       return false;
+}

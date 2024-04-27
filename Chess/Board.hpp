@@ -27,8 +27,8 @@ class Board{
     
 public:
     Board(){
-        createPieces();
-        initBoardDisplay();
+//        createPieces();
+//        initBoardDisplay();
     }
     
     void unhighlight( bool HPs[][8]);
@@ -66,16 +66,14 @@ public:
     }
     
     
-    void move(Position s, Position d,sf::RenderWindow* window){
+    void move(Position s, Position d){
         sf::Color Grey(128, 128, 128);
-      //  initBoxDisplay(box, calcColor(s.R--, s.C--)==White? sf::Color::White:Grey, sf::Color::Black, s);
-  
-        Bs[s.R][s.C]->setBoardPos(window, d, Bs[s.R][s.C]->getId());
+        
+        Bs[s.R][s.C]->setBoardPos(d, Bs[s.R][s.C]->getId());
 
         Bs[d.R][d.C] = Bs[s.R][s.C];
         Bs[s.R][s.C]->setPos(d);
 
-        //window->display();
         Bs[s.R][s.C] = nullptr;
     }
     
