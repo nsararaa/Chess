@@ -49,7 +49,7 @@ void Chess::pollEvent(){
                 //                    <#code#>
                 //                    break;
             case sf::Event::MouseButtonPressed:
-                sf::Vector2i mousePos;
+                
                 sf::Mouse::getPosition(*window);
                 std::cout<< mousePos.x<< ", "<< mousePos.y<< std::endl;
 //                    bishop[0].setPosition(mousePos.x, mousePos.y);
@@ -169,4 +169,52 @@ bool Chess::check(Board b, int turn){
            }
        }
        return false;
+}
+
+bool Chess::selfCheck(){
+    turnChange(turn);
+    bool sc = check(b,turn);
+    turnChange(turn);
+    return sc;
+}
+
+
+
+void Chess::undoBox(sf::RectangleShape& undo, sf::Color bgCol){
+    undo.setSize(sf::Vector2f(100,50.f));
+    undo.setPosition(900, 10);
+    undo.setFillColor(bgCol);
+    
+    
+    text.setFont(font);
+    text.setString("Undo");
+    text.setCharacterSize(24);
+      text.setFillColor(sf::Color::Black);
+    text.setPosition(920, 20);
+}
+
+
+void Chess::printUndo(){
+    window->draw(undoButton);
+    window->draw(text);
+}
+
+void Chess::displayGame(){
+    b.drawBoard(window);
+    b.drawBoardState(window);
+    printUndo();
+    window->display();
+}
+
+
+void Chess::addToArray(std::vector <Move> &moves, Position s, Position d){
+    moves.push_back({s,d});
+}
+
+void Chess::undo(std::vector <Move> &moves){
+    Move lastMove = moves.back();
+    moves.pop_back();
+    b.move(lastMove.dst, lastMove.src);
+    
+    turnChange(turn);
 }

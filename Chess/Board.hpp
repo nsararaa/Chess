@@ -42,47 +42,18 @@ public:
    
 
    
-    Color getColor(int r, int c){
-        return Bs[r][c]->getColor();
-    }
-    Piece * pieceAt(Position src){ //get Piece
-        return Bs[src.R][src.C];
-    }
+    Color getColor(int r, int c);
+    Piece * pieceAt(Position src);
     
-    Color calcColor(int r,int c){
-        if(r == 0 || r == 2||r ==4 || r==6 ){
-            if(c == 0 || c == 2||c ==4 || c==6)
-                return White;
-            else
-                return Black;
-        }
-        else if(r == 1 || r == 3||r ==5 || r==7 ){
-            if(c == 1 || c == 3||c ==5 || c==7)
-                return White;
-            else
-                return Black;
-        }
-        return White;
-    }
+    Color calcColor(int r,int c);
     
-    
-    void move(Position s, Position d){
-        sf::Color Grey(128, 128, 128);
-        
-        Bs[s.R][s.C]->setBoardPos(d, Bs[s.R][s.C]->getId());
-
-        Bs[d.R][d.C] = Bs[s.R][s.C];
-        Bs[s.R][s.C]->setPos(d);
-
-        Bs[s.R][s.C] = nullptr;
-    }
+    void move(Position s, Position d);
     
     void createPieces();
 
     
     bool isVerticalPathClear(Position s, Position d);
     bool isHorizontalPathClear(Position s, Position d);
-    
     
     bool isDiagPathClear(Position s, Position d);
     

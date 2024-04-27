@@ -13,6 +13,12 @@
 #include "Board.hpp"
 #include <fstream>
 
+//
+//901, 11
+//901, 59
+//998, 57
+//999, 10
+
 class Chess{
   
     Player* Ps[2];
@@ -29,6 +35,13 @@ class Chess{
     sf::Texture tWelcome;
     sf::Sprite welcome;
     
+    sf::Font font;
+    
+    sf::RectangleShape undoButton;
+    sf::Text text;
+    
+    sf::Vector2i mousePos;
+    
 public:
     Chess(){
         Ps[0] = new Player("Sara", Black);
@@ -39,6 +52,10 @@ public:
         VidMode.width =1400;
         VidMode.height = 800;
         window = new sf::RenderWindow(VidMode, "Chess", sf::Style::Titlebar | sf::Style::Close);
+        
+        if(!font.loadFromFile("/Users/saranoor/Downloads/Xcode/Chess disp/Roboto-BoldItalic.ttf"))
+                std::cout << "Error";
+       
     }
     
     
@@ -62,20 +79,16 @@ public:
     Position findKing(Board b, int turn);
     bool check(Board b, int turn);
     bool isValidSrc(Position src, int turn);
-    bool selfCheck(){
-        turnChange(turn);
-        return check(b, turn);
-    }
-
-
     
+    bool selfCheck();
+
     
     
     bool checkmate(Position src){
         if(check(b, turn)){
             for(int r=0; r < 8; r++){
                 for(int c=0; c < 8; c++){
-                    if(b.pieceAt(src)->isLegal(src))
+                    if(b.pieceAt({src})->isLegal({r,c}))
                         return false;
                 }
             }
@@ -95,15 +108,8 @@ public:
             std::cout << ele.src.R << " " << ele.src.C << ", " << ele.dst.R << " " <<ele.dst.C << std::endl;
         }
     }
-    void addToArray(std::vector <Move> &moves, Position s, Position d){
-        moves.push_back({s,d});
-    }
-    
-    void undo(std::vector <Move> &moves){
-        Move lastMove = moves.back();
-        moves.pop_back();
-        b.move(lastMove.dst, lastMove.src);
-    }
+    void addToArray(std::vector <Move> &moves, Position s, Position d);
+    void undo(std::vector <Move> &moves);
     
     
     void saveToFile(){
@@ -120,6 +126,7 @@ public:
         
     }
     
+  
     void loadFromFile(){
         std::ifstream Rdr("/Users/saranoor/Downloads/Xcode/Chess/Chess/chessState.txt");
         
@@ -141,9 +148,29 @@ public:
         }
     }
     
+    void undoBox(sf::RectangleShape& box, sf::Color bgCol);
+    
+    void printUndo();
+    void displayGame();
+    
+    
+    bool stalemate(){
+        
+        for(int r=0; r < 8; r++){
+            for(int c =0; c < 8; c++){
+                if(b.pieceAt(src)->isLegal({r,c}) && selfCheck())
+                    return true;
+            }
+        }
+        return false;
+    }
+    
+    
     void play(){
+        undoBox(undoButton, sf::Color::Yellow);
+        
         std::vector <Move> moves;
-        bool checkB=false;
+        bool undoInitiated=false,s;
         char Undo = 'n', saveFile = 'n', loadFile = 'n';
         
         if(loadFile == 'n'){
@@ -154,80 +181,70 @@ public:
             loadFromFile();
         }
         
-        b.drawBoard(window);
-        b.drawBoardState(window);
-        window->display();
+        displayGame();
         while(window->isOpen()){
            pollEvent();
-
             turnMsg(turn);
             do{
                 do{
                     do{
                         selectPos("Source",src);
+                        if(src.R == 0 && src.C == 9){
+                            undoInitiated = true;
+                            undo(moves);
+                            displayGame();
+                            break;
+                        }
                     }while(!isValidSrc(turn));
                     
-                    highlight(b, src, HPs, turn);
-                    printHighlightConsole(HPs);
-                    b.printHighlightWindow(HPs);
+                    if(undoInitiated)
+                        break;
                     
-                    b.drawBoard(window);
-                    b.drawBoardState(window);
-                    window->display();
-                   
-                
-                    selectPos("Destination", dest);
+                        highlight(b, src, HPs, turn);
+                        printHighlightConsole(HPs);
+                        b.printHighlightWindow(HPs);
+                        
+                    displayGame();
                     
-                    
-//                    if(selfCheck()){
-//                        std::cout << "Selfcheck" << std::endl;
-//                        continue;
-//                    }
+                        selectPos("Destination", dest);
                 }while(!isValidDst(turn));
-                
+
+                if(undoInitiated)
+                    break;
                 addToArray(moves, src, dest);
                 printMoves(moves);
-                
                 b.unhighlight(HPs);
-                
-                b.drawBoard(window);
-                b.drawBoardState(window);
-                window->display();
-            //}while (!b.pieceAt(src)->isLegal(dest));
+
+                //displayGame();
             }while (!HPs[dest.R][dest.C]);
 
-            
-        
-            b.move(src, dest);
-            
-
-//            if (check(b, turn)) {
-//                std::cout << "Check" << std::endl;
-//                checkB = true;
-//            }
-
-            
-            b.drawBoard(window);
-            b.drawBoardState(window);
-            window->display();
-           
-            
-          //  std::cin >> Undo;
-            if(Undo == 'y'){
-                undo(moves);
-                b.drawBoard(window);
-                b.drawBoardState(window);
-                window->display();
-               
+            if(!undoInitiated){
+                b.move(src, dest);
+                
+                //            if(selfCheck()){
+                //                std::cout << "Selfcheck" << std::endl;
+                //                undo(moves);
+                //            }
+                
+                //            if (check(b, turn)) {
+                //                std::cout << "Check" << std::endl;
+                
+                //undo(moves);
+                //            }
+                displayGame();
+                
+                //            if (checkmate(src)) {
+                //                std::cout << "Checkmate \nGame over." << std::endl;
+                //                window->close();
+                //            }
                 turnChange(turn);
             }
-//            if (checkmate(src)) {
-//                std::cout << "Checkmate \nGame over." << std::endl;
-//                window->close();
+            undoInitiated = false;
+//            if(checkmate(src)){
+//                break;
 //            }
-            
-            turnChange(turn);
         }
+        
     }
     
     
