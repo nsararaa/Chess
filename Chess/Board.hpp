@@ -85,6 +85,9 @@ public:
     bool isVerticalPathClear(Position s, Position d);
     bool isHorizontalPathClear(Position s, Position d);
     
+    
+    bool isDiagPathClear(Position s, Position d);
+    
     bool isDiagLtoRPathClear(Position s, Position d);
     bool isDiagRtoLPathClear( Position s, Position d);
 

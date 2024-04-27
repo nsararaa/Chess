@@ -64,23 +64,32 @@ public:
     Position findKing(Board b, int turn){
         for(int r=0; r < 8; r++){
             for(int c=0; c < 8; c++){
-                if(b.pieceAt({r,c})->amIKing() && b.pieceAt({r,c})->getColor() == turn)
-                    return {r,c};
+                if(b.pieceAt({r,c}) != nullptr)
+                    if(b.pieceAt({r,c})->amIKing() && b.pieceAt({r,c})->getColor() == turn)
+                        return {r,c};
             }
         }
         return {0,0};
     }
     
+    bool isValidSrc(Position src, int turn){
+        if(b.pieceAt(src) != nullptr)
+            return src.R <=7 && src.C <=7 && src.R >=0 && src.C >=0&& b.pieceAt(src)->getColor() == turn;
+        return false;
+    }
+
+    int i =0;
     bool check(Board b, int turn){
            Position kingPos;
            turnChange(turn);
            kingPos = findKing(b, turn);
            turnChange(turn);
-           
+   
            for(int r=0; r < 8; r++){
                for(int c =0; c < 8; c++){
-                   if(b.pieceAt({r,c}) != nullptr && b.pieceAt({r,c})->isLegal(kingPos) && isValidSrc(turn))
-                       return true;
+                   if(b.pieceAt({r,c}) != nullptr)
+                       if(b.pieceAt({r,c})->isLegal(kingPos) && isValidSrc({r,c}, turn))
+                           return true;
                }
            }
            return false;
@@ -107,9 +116,30 @@ public:
     }
 
     
+    struct Move{
+        Position src, dst;
+    };
+    
+    void printMoves(std::vector <Move> moves){
+        std::cout << std::endl;
+        for(auto ele: moves){
+            std::cout << ele.src.R << " " << ele.src.C << ", " << ele.dst.R << " " <<ele.dst.C << std::endl;
+        }
+    }
+    void addToArray(std::vector <Move> &moves, Position s, Position d){
+        moves.push_back({s,d});
+    }
+    
+    void undo(std::vector <Move> &moves, sf::RenderWindow* w){
+        Move lastMove = moves.back();
+        moves.pop_back();
+        b.move(lastMove.dst, lastMove.src, w);
+    }
+    
     
     void play(){
-        
+        std::vector <Move> moves;
+        bool checkB=false;
         b.drawBoard(window);
         b.drawBoardState(window);
         window->display();
@@ -140,6 +170,10 @@ public:
 //                        continue;
 //                    }
                 }while(!isValidDst(turn));
+                
+                addToArray(moves, src, dest);
+                printMoves(moves);
+                
                 b.unhighlight(HPs);
                 
                 b.drawBoard(window);
@@ -151,11 +185,12 @@ public:
         
             b.move(src, dest, window);
             
-            
+
 //            if (check(b, turn)) {
 //                std::cout << "Check" << std::endl;
+//                checkB = true;
 //            }
-            
+
             b.drawBoard(window);
             b.drawBoardState(window);
             window->display();

@@ -146,14 +146,18 @@ void Board::createPieces(){
 bool Board::isVerticalPathClear(Position s, Position d) {
     int rS = 0, rE = 0;
     if (s.R < d.R) { /// up-> down
-        rS = s.R + 1; rE = d.R;
+        rS = s.R+1; rE = d.R-1;
     }
     else if (s.R > d.R) {/// down -> up
-        rS = d.R; rE = s.R - 1;
+        rS = d.R+1; rE = s.R-1;
     }
     for (int r = rS; r <= rE; r++) {
-        if (Bs[r][d.C] != nullptr)
-            return false;
+        if(Bs[r][d.R] != nullptr){ //not khali
+            if(Bs[r][d.R]->getColor() == Bs[s.R][s.C]->getColor())
+                return false;
+            else
+                return false;
+        }
     }
     return true;
 }
@@ -164,9 +168,11 @@ bool Board::isHorizontalPathClear(Position s, Position d) {
             cS=s.C+1; cE = d.C-1;}
         else{/// <---------
             cS=d.C+1; cE = s.C-1;} //CHECK
-    
         for(int c= cS; c <=cE; c++){
             if(Bs[d.R][c] != nullptr)
+                if(Bs[d.R][c]->getColor() == Bs[s.R][s.C]->getColor())
+                return false;
+            else
                 return false;
         }
 
@@ -177,16 +183,26 @@ bool Board::isHorizontalPathClear(Position s, Position d) {
 bool Board::isDiagLtoRPathClear(Position s, Position d) {
     if (s.R < d.R) { // down towards right
         int dr = abs(d.R - s.R) ;
-        for (int i = 1; i <= dr; i++) //
-            if (Bs[s.R + i][s.C + i]!= nullptr)
-                return false;
+        for (int i = 1; i <= dr; i++) {
+            if (Bs[s.R + i][s.C + i]!= nullptr){
+                if(Bs[s.R + i][s.C +i]->getColor() == Bs[s.R][s.C]->getColor())
+                    return false;
+                else
+                    return false;
+            }
+        }
         return true;
     }
     else { // up towards left
         int dr = abs(d.R - s.R) ;
         for (int i = 1; i <= dr; i++) {
-            if (Bs[s.R - i][s.C - i]!= nullptr)
-                return false;
+            if (Bs[s.R - i][s.C - i]!= nullptr){
+                if(Bs[s.R - i][s.C -i]->getColor() == Bs[s.R][s.C]->getColor())
+                    return false;
+                else
+                    return false;
+            }
+            
         }
         return true;
     }
@@ -195,7 +211,7 @@ bool Board::isDiagRtoLPathClear( Position s, Position d) { //left to right
     if (s.R < d.R) { ///down towards left
         int dr = abs(d.R - s.R) ; //-1
         for (int i = 1; i <= dr; i++)
-            if ( Bs[s.R + i][s.C - i] != nullptr)
+            if (Bs[s.R + i][s.C - i] != nullptr)
                 return false;
         return true;
     }
@@ -206,4 +222,52 @@ bool Board::isDiagRtoLPathClear( Position s, Position d) { //left to right
                 return false;
         return true;
     }
+}
+
+
+bool Board::isDiagPathClear(Position s, Position d) {
+    int dr = abs(d.R - s.R);
+    int dc = abs(d.C - s.C);
+    
+    if (s.R < d.R && s.C < d.C){
+        for(int i=1; i < dr; i++){
+            if(Bs[s.R+i][s.C+i] != nullptr){
+                if(Bs[s.R+i][s.C+i]->getColor() == Bs[s.R][s.C]->getColor())
+                   return false;
+                else
+                   return false;
+            }
+        }
+    }
+    else if (s.R > d.R && s.C < d.C) {
+        for(int i=1; i < dr; i++){
+            if(Bs[s.R-i][s.C+i] != nullptr){
+                if(Bs[s.R-i][s.C+i]->getColor() == Bs[s.R][s.C]->getColor())
+                   return false;
+                else
+                   return false;
+            }
+        }
+    }
+    else if (s.R > d.R && s.C > d.C) {
+        for(int i=1; i < dr; i++){
+            if(Bs[s.R-i][s.C-i] != nullptr){
+                if(Bs[s.R-i][s.C-i]->getColor() == Bs[s.R][s.C]->getColor())
+                   return false;
+                else
+                   return false;
+            }
+        }
+    }
+    else if (s.R < d.R && s.C > d.C){
+        for(int i=1; i < dr; i++){
+            if(Bs[s.R+i][s.C-i] != nullptr){
+                if(Bs[s.R+i][s.C-i]->getColor() == Bs[s.R][s.C]->getColor())
+                   return false;
+                else
+                   return false;
+            }
+        }
+    }
+    return true;
 }

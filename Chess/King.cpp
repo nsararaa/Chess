@@ -12,7 +12,7 @@
 bool King::isLegal(Position dest){
     int dR = abs(pos.R - dest.R);
     int dC = abs(pos.C - dest.C);
-    return ( ((isVertMove(pos, dest) && b->isVerticalPathClear(pos, dest)) || (isHoriMove(pos, dest) && b->isHorizontalPathClear(pos, dest))) || (isDiagMove(pos, dest) && ( b->isDiagLtoRPathClear(pos, dest) || b->isDiagRtoLPathClear(pos, dest)))) && dR <= 1 && dC <= 1;
+    return ( ((isVertMove(pos, dest) && b->isVerticalPathClear(pos, dest)) || (isHoriMove(pos, dest) && b->isHorizontalPathClear(pos, dest))) || (isDiagMove(pos, dest) && (b->isDiagPathClear(pos, dest)))) && dR <= 1 && dC <= 1;
     
 }
 

@@ -23,10 +23,10 @@ protected:
     
     
    static bool isHoriMove(Position s, Position d){
-        return s.R == d.R;
+        return s.R == d.R && s.C != d.C;
     }
     static bool isVertMove(Position s, Position d){
-        return s.C == d.C;
+        return s.C == d.C && s.R != d.R;
     }
     static bool isDiagMove(Position s, Position d){
         Position delta;

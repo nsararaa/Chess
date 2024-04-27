@@ -10,5 +10,5 @@
 
 
 bool Bishop::isLegal(Position dest){
-    return isDiagMove(pos, dest) && ( b->isDiagLtoRPathClear(pos, dest) || b->isDiagRtoLPathClear(pos, dest));
+    return ((isDiagMove(pos, dest)) && (b->isDiagPathClear(pos, dest)));
 }
