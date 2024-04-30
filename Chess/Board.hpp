@@ -41,6 +41,26 @@ public:
    
    
 
+    void highlightCheck(Position kP){
+        initBoxDisplay(board[kP.R][kP.C],sf::Color::Red,{kP.R*100, kP.C*100});
+    }
+   
+    void unhighlightCheck(Position kP){
+        int r = kP.R, c = kP.C;
+        sf::Color Grey(128, 128, 128);
+        if(r == 0 || r == 2||r ==4 || r==6 ){
+            if(c == 0 || c == 2||c ==4 || c==6)
+                initBoxDisplay(board[r][c],sf::Color::White, {r*100, c*100});
+            else
+                initBoxDisplay(board[r][c],Grey,{r*100, c*100});
+        }
+        else if(r == 1 || r == 3||r ==5 || r==7 ){
+            if(c == 1 || c == 3||c ==5 || c==7)
+                initBoxDisplay(board[r][c],sf::Color::White,{r*100, c*100});
+            else
+                initBoxDisplay(board[r][c],Grey, {r*100, c*100});
+        }
+    }
    
     Color getColor(int r, int c);
     Piece * pieceAt(Position src);

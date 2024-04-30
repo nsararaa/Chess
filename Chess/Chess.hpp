@@ -125,8 +125,6 @@ public:
         }
         
     }
-    
-  
     void loadFromFile(){
         std::ifstream Rdr("/Users/saranoor/Downloads/Xcode/Chess/Chess/chessState.txt");
         
@@ -168,7 +166,7 @@ public:
     
     void play(){
         undoBox(undoButton, sf::Color::Yellow);
-        
+        Position kP ;
         std::vector <Move> moves;
         bool undoInitiated=false,s;
         char Undo = 'n', saveFile = 'n', loadFile = 'n';
@@ -192,6 +190,7 @@ public:
                         if(src.R == 0 && src.C == 9){
                             undoInitiated = true;
                             undo(moves);
+                            b.unhighlightCheck(kP);
                             displayGame();
                             break;
                         }
@@ -221,28 +220,47 @@ public:
             if(!undoInitiated){
                 b.move(src, dest);
                 
-                //            if(selfCheck()){
-                //                std::cout << "Selfcheck" << std::endl;
-                //                undo(moves);
-                //            }
+//            if(selfCheck()){
+//                std::cout << "Selfcheck" << std::endl;
+//                undo(moves);
+//            }
                 
-                //            if (check(b, turn)) {
-                //                std::cout << "Check" << std::endl;
+            if (check(b, turn)) {
+                std::cout << "Check" << std::endl;
+                turnChange(turn);
+                kP = findKing(b, turn);
+                turnChange(turn);
+                b.highlightCheck(kP);
+                b.drawBoard(window);
+                b.drawBoardState(window);
+                printUndo();
+                window->display();
                 
-                //undo(moves);
-                //            }
+                //b.unhighlight(HPs);
+                //displayGame();
+               // undo(moves);
+                //b.pieceAt(src)->
+                //CHANGE LEGALITY
+                
+                
+               // displayGame();
+
+
+            }
+//
+                
+                
                 displayGame();
+//
+
                 
-                //            if (checkmate(src)) {
-                //                std::cout << "Checkmate \nGame over." << std::endl;
-                //                window->close();
-                //            }
+//
                 turnChange(turn);
             }
             undoInitiated = false;
-//            if(checkmate(src)){
-//                break;
-//            }
+            //            if (checkmate(src) ) {
+            //                std::cout << "Checkmate \nGame over." << std::endl;
+            //                    window->close();}
         }
         
     }

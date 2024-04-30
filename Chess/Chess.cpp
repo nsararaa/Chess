@@ -119,8 +119,16 @@ void Chess::highlight(Board b, Position src, bool HPs[][8], int turn){
                 HPs[r][c] = (b.pieceAt(src)->isLegal({r,c}) && b.pieceAt({r,c})->getColor()!= turn);
             else //square is unoccupied
                 HPs[r][c] = (b.pieceAt(src)->isLegal({r,c}));
+            
+            if(b.pieceAt(src)->amIPawn()){
+                b.pieceAt(src)->capture(src, b.pieceAt(src)->getColor(), HPs);
+            }
+           
+            
         }
     }
+    
+    
 
 }
 

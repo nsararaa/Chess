@@ -67,6 +67,13 @@ public:
     }
     
     bool isLegal(Position dest);
+    
+    
+    bool capture(Position dest, Color col, bool HPs[][8]);
+    
+    bool amIPawn(){
+        return true;
+    }
 
 };
 #endif /* Pawn_hpp */

@@ -144,22 +144,20 @@ void Board::createPieces(){
 
 
 bool Board::isVerticalPathClear(Position s, Position d) {
-    int rS = 0, rE = 0;
-    if (s.R < d.R) { /// up-> down
-        rS = s.R+1; rE = d.R-1;
+    int cS, cE;
+    if(s.R <d.R){ /// ----------->
+        cS=s.R+1; cE = d.R-1;}
+    else{/// <---------
+        cS=d.R+1; cE = s.R-1;}
+    for(int c= cS; c <=cE; c++){
+        if(Bs[c][d.C] != nullptr)
+            if(Bs[c][d.C]->getColor() == Bs[s.R][s.C]->getColor())
+            return false;
+        else
+            return false;
     }
-    else if (s.R > d.R) {/// down -> up
-        rS = d.R+1; rE = s.R-1;
-    }
-    for (int r = rS; r <= rE; r++) {
-        if(Bs[r][d.R] != nullptr){ //not khali
-            if(Bs[r][d.R]->getColor() == Bs[s.R][s.C]->getColor())
-                return false;
-            else
-                return false;
-        }
-    }
-    return true;
+
+return true;
 }
 
 bool Board::isHorizontalPathClear(Position s, Position d) {
@@ -167,7 +165,7 @@ bool Board::isHorizontalPathClear(Position s, Position d) {
         if(s.C <d.C){ /// ----------->
             cS=s.C+1; cE = d.C-1;}
         else{/// <---------
-            cS=d.C+1; cE = s.C-1;} //CHECK
+            cS=d.C+1; cE = s.C-1;}
         for(int c= cS; c <=cE; c++){
             if(Bs[d.R][c] != nullptr)
                 if(Bs[d.R][c]->getColor() == Bs[s.R][s.C]->getColor())
