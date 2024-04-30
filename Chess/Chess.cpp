@@ -232,7 +232,8 @@ void Chess::displayGame(){
 
 
 void Chess::addToArray(std::vector <Move> &moves, Position s, Position d){
-    moves.push_back({s,d});
+    if(s.R != 0 && s.C != 9) //undo coordinates
+        moves.push_back({s,d});
 }
 
 void Chess::undo(std::vector <Move> &moves){
@@ -242,6 +243,10 @@ void Chess::undo(std::vector <Move> &moves){
     
     turnChange(turn);
 }
+
+
+
+
 
 
 

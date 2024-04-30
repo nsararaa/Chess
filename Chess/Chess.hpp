@@ -27,6 +27,12 @@ class Chess{
     Board b;
     bool HPs[8][8] {};
     
+    
+    struct Move{
+        Position src, dst;
+    };
+    
+    std::vector <Move> moves;
     //display
     sf::RenderWindow* window;
     sf::VideoMode VidMode;
@@ -42,10 +48,7 @@ class Chess{
     
     sf::Vector2i mousePos;
     
-    
-    struct Move{
-        Position src, dst;
-    };
+  
     void printMoves(std::vector <Move> moves){
         std::cout << std::endl;
         for(auto ele: moves){
@@ -117,19 +120,19 @@ public:
         
         for(int r=0; r < 8; r++){
             for(int c =0; c < 8; c++){
-                if(b.pieceAt(src)->isLegal({r,c}) && selfCheck())
+                if(b.pieceAt(src)->isLegal({r,c}) )
                     return true;
             }
         }
         return false;
     }
-    
+  
     
     void play(){
         undoBox(undoButton, sf::Color::Yellow);
         Position kP ;
-        std::vector <Move> moves;
-        bool undoInitiated=false,s;
+        
+        bool undoInitiated=false,s, Check;
         char Undo = 'n', saveFile = 'n', loadFile = 'n';
         
         if(loadFile == 'n'){
@@ -144,6 +147,7 @@ public:
         while(window->isOpen()){
            pollEvent();
             turnMsg(turn);
+            
             do{
                 do{
                     do{
@@ -151,7 +155,7 @@ public:
                         if(src.R == 0 && src.C == 9){
                             undoInitiated = true;
                             undo(moves);
-                            b.unhighlightCheck(kP);
+                   
                             displayGame();
                             break;
                         }
@@ -168,7 +172,6 @@ public:
                     
                         selectPos("Destination", dest);
                 }while(!isValidDst(turn));
-
                 if(undoInitiated)
                     break;
                 addToArray(moves, src, dest);
@@ -181,47 +184,35 @@ public:
             if(!undoInitiated){
                 b.move(src, dest);
                 
-//            if(selfCheck()){
-//                std::cout << "Selfcheck" << std::endl;
-//                undo(moves);
-//            }
+            if(selfCheck()){
+                std::cout << "Selfcheck" << std::endl;
+                undo(moves);
+            }
                 
             if (check(b, turn)) {
                 std::cout << "Check" << std::endl;
                 turnChange(turn);
                 kP = findKing(b, turn);
                 turnChange(turn);
+                Check = true;
+                
                 b.highlightCheck(kP);
                 b.drawBoard(window);
                 b.drawBoardState(window);
                 printUndo();
                 window->display();
                 
-                //b.unhighlight(HPs);
-                //displayGame();
-               // undo(moves);
-                //b.pieceAt(src)->
-                //CHANGE LEGALITY
-                
-                
-               // displayGame();
-
-
             }
-//
-                
-                
-                displayGame();
-//
 
-                
-//
+                displayGame();
+
                 turnChange(turn);
             }
             undoInitiated = false;
             //            if (checkmate(src) ) {
             //                std::cout << "Checkmate \nGame over." << std::endl;
             //                    window->close();}
+            b.unhighlightCheck(kP);
         }
         
     }
