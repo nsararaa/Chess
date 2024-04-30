@@ -42,21 +42,19 @@ class Chess{
     
     sf::Vector2i mousePos;
     
-public:
-    Chess(){
-        Ps[0] = new Player("Sara", Black);
-        Ps[1] = new Player("Manal", White);
-        turn = White;
-            
-        
-        VidMode.width =1400;
-        VidMode.height = 800;
-        window = new sf::RenderWindow(VidMode, "Chess", sf::Style::Titlebar | sf::Style::Close);
-        
-        if(!font.loadFromFile("/Users/saranoor/Downloads/Xcode/Chess disp/Roboto-BoldItalic.ttf"))
-                std::cout << "Error";
-       
+    
+    struct Move{
+        Position src, dst;
+    };
+    void printMoves(std::vector <Move> moves){
+        std::cout << std::endl;
+        for(auto ele: moves){
+            std::cout << ele.src.R << " " << ele.src.C << ", " << ele.dst.R << " " <<ele.dst.C << std::endl;
+        }
     }
+    
+public:
+    Chess();
     
     
     
@@ -82,6 +80,23 @@ public:
     
     bool selfCheck();
 
+  
+   
+
+    void addToArray(std::vector <Move> &moves, Position s, Position d);
+    void undo(std::vector <Move> &moves);
+    
+    
+    void saveToFile();
+    void loadFromFile();
+    void undoBox(sf::RectangleShape& box, sf::Color bgCol);
+    
+    void printUndo();
+    void displayGame();
+    
+    
+    
+    
     
     
     bool checkmate(Position src){
@@ -97,60 +112,6 @@ public:
         return false;
     }
 
-    
-    struct Move{
-        Position src, dst;
-    };
-    
-    void printMoves(std::vector <Move> moves){
-        std::cout << std::endl;
-        for(auto ele: moves){
-            std::cout << ele.src.R << " " << ele.src.C << ", " << ele.dst.R << " " <<ele.dst.C << std::endl;
-        }
-    }
-    void addToArray(std::vector <Move> &moves, Position s, Position d);
-    void undo(std::vector <Move> &moves);
-    
-    
-    void saveToFile(){
-        std::ofstream Wtr("/Users/saranoor/Downloads/Xcode/Chess/Chess/chessState.txt");
-        for(int r=0; r < 8; r++){
-            for(int c=0; c <8; c++){
-                Piece* piece = b.pieceAt({r, c});
-                if(piece != nullptr){
-                    Position p = piece->getPosition();
-                    Wtr << piece->getId() << " " << (piece->getColor()== Black?'B':'W') << " " << p.R << " "<< p.C << std::endl;
-                }
-            }
-        }
-        
-    }
-    void loadFromFile(){
-        std::ifstream Rdr("/Users/saranoor/Downloads/Xcode/Chess/Chess/chessState.txt");
-        
-        
-        while(Rdr){
-            Color color;
-            char col;
-            int id;
-            Position p;
-            Rdr >> id;
-            Rdr >> col;
-            Rdr >> p.R;
-            Rdr >> p.C;
-            Piece *piece = b.pieceAt(p);
-            
-            piece->setId(id);
-            piece->setColor(col == 'B'? Black:White);
-            piece->setPos(p);
-        }
-    }
-    
-    void undoBox(sf::RectangleShape& box, sf::Color bgCol);
-    
-    void printUndo();
-    void displayGame();
-    
     
     bool stalemate(){
         
@@ -264,6 +225,9 @@ public:
         }
         
     }
+    
+    
+    
     
     
     
