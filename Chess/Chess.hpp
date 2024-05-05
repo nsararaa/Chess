@@ -101,21 +101,42 @@ public:
     
     
     
-    
     bool checkmate(Position src){
-        if(check(b, turn)){
+        bool Hp[8][8];
+        turnChange(turn);
             for(int r=0; r < 8; r++){
                 for(int c=0; c < 8; c++){
-                    if(b.pieceAt({src})->isLegal({r,c}))
-                        return false;
+
+                    
+                    if(b.pieceAt({r, c}) !=nullptr){
+                        highlight(b, {r,c}, Hp, turn);
+                        if(b.pieceAt({r, c})->getColor() == turn){
+                            
+                            
+                            for(int rI=0; rI < 8; rI++){
+                                for(int cI=0; cI < 8; cI++){
+                                    if(Hp[rI][cI]){
+                                        Board copyBoard = b;
+                                       // highlight(copyBoard, {r,c}, Hp, turn);
+                                        printHighlightConsole(Hp);
+                                        std::cout << std::endl;
+                                       // copyBoard.move({r, c}, {rI, cI});
+
+                                        turnChange(turn);
+                                        return false;
+                                    }
+                                }
+                            }
+                            
+                            
+                        }
+                    }
                 }
             }
             return true;
-        }
-        return false;
-    }
+}
 
-    
+
     bool stalemate(){
         
         for(int r=0; r < 8; r++){
@@ -155,7 +176,7 @@ public:
                         if(src.R == 0 && src.C == 9){
                             undoInitiated = true;
                             undo(moves);
-                   
+                            std::cout << "undo" << std::endl;
                             displayGame();
                             break;
                         }
@@ -172,6 +193,7 @@ public:
                     
                         selectPos("Destination", dest);
                 }while(!isValidDst(turn));
+                
                 if(undoInitiated)
                     break;
                 addToArray(moves, src, dest);
@@ -187,9 +209,12 @@ public:
             if(selfCheck()){
                 std::cout << "Selfcheck" << std::endl;
                 undo(moves);
+                std::cout << "undo" << std::endl;
             }
                 
-            if (check(b, turn)) {
+            Check = check(b, turn);
+                
+            if(Check){
                 std::cout << "Check" << std::endl;
                 turnChange(turn);
                 kP = findKing(b, turn);
@@ -201,7 +226,6 @@ public:
                 b.drawBoardState(window);
                 printUndo();
                 window->display();
-                
             }
 
                 displayGame();
@@ -209,9 +233,13 @@ public:
                 turnChange(turn);
             }
             undoInitiated = false;
-            //            if (checkmate(src) ) {
-            //                std::cout << "Checkmate \nGame over." << std::endl;
-            //                    window->close();}
+            if (Check){
+                if (checkmate(src) ) {
+                    std::cout << "Checkmate \nGame over." << std::endl;
+                    window->close();
+
+                }
+            }
             b.unhighlightCheck(kP);
         }
         

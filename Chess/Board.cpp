@@ -298,7 +298,6 @@ Color Board::calcColor(int r,int c){
 
 
 void Board::move(Position s, Position d){
-    sf::Color Grey(128, 128, 128);
     
     Bs[s.R][s.C]->setBoardPos(d, Bs[s.R][s.C]->getId());
 

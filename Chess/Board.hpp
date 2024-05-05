@@ -52,6 +52,7 @@ public:
     
     void createPieces();
 
+  
     
     bool isVerticalPathClear(Position s, Position d);
     bool isHorizontalPathClear(Position s, Position d);

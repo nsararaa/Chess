@@ -32,7 +32,7 @@ private:
 public:
 
     virtual void print(){
-        
+      //  King k;
     }
     
     virtual void draw(sf::RenderWindow* window, int id)=0;
@@ -49,6 +49,14 @@ public:
     int getId();
     Color getColor();
     Position getPosition();
+    virtual bool amIPawn(){
+        return false;
+    }
+    
+      virtual bool capture(Position dest, Color col,bool HPs[][8]){
+          return false;
+      }
+    
     
     
     
@@ -56,12 +64,6 @@ public:
     virtual void setBoardPos(Position dst, int id)=0;
     virtual bool isLegal(Position dest)=0;
     virtual bool amIKing(){
-        return false;
-    }
-    virtual bool amIPawn(){
-        return false;
-    }
-    virtual bool capture(Position dest, Color col,bool HPs[][8]){
         return false;
     }
     

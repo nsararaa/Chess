@@ -127,10 +127,27 @@ Position Chess::convertPosToWindow(Position& Pos) {
 }
 
 
+bool Chess::check(Board b, int turn){
+       Position kingPos;
+       turnChange(turn);
+       kingPos = findKing(b, turn);
+       turnChange(turn);
+
+       for(int r=0; r < 8; r++){
+           for(int c =0; c < 8; c++){
+               if(b.pieceAt({r,c}) != nullptr)
+                   if(b.pieceAt({r,c})->isLegal(kingPos) && isValidSrc({r,c}, turn))
+                       return true;
+           }
+       }
+       return false;
+}
+
 
 void Chess::highlight(Board b, Position src, bool HPs[][8], int turn){
     for(int r=0; r < 8; r++){
         for(int c=0; c < 8; c++){
+            
             if(b.pieceAt({r,c}) != nullptr) //square is occupied //check for opposite clr
                 HPs[r][c] = (b.pieceAt(src)->isLegal({r,c}) && b.pieceAt({r,c})->getColor()!= turn);
             else //square is unoccupied
@@ -139,7 +156,7 @@ void Chess::highlight(Board b, Position src, bool HPs[][8], int turn){
             if(b.pieceAt(src)->amIPawn()){
                 b.pieceAt(src)->capture(src, b.pieceAt(src)->getColor(), HPs);
             }
-           
+            
             
         }
     }
@@ -179,21 +196,6 @@ bool Chess::isValidSrc(Position src, int turn){
 }
 
 int i =0;
-bool Chess::check(Board b, int turn){
-       Position kingPos;
-       turnChange(turn);
-       kingPos = findKing(b, turn);
-       turnChange(turn);
-
-       for(int r=0; r < 8; r++){
-           for(int c =0; c < 8; c++){
-               if(b.pieceAt({r,c}) != nullptr)
-                   if(b.pieceAt({r,c})->isLegal(kingPos) && isValidSrc({r,c}, turn))
-                       return true;
-           }
-       }
-       return false;
-}
 
 bool Chess::selfCheck(){
     turnChange(turn);
