@@ -43,10 +43,13 @@ class Chess{
     
     sf::Font font;
     
-    sf::RectangleShape undoButton;
-    sf::Text text;
+    sf::RectangleShape undoButton, saveButton;
+    sf::Text uText, sText;
     
     sf::Vector2i mousePos;
+    
+    
+    
     
   
     void printMoves(std::vector <Move> moves){
@@ -65,6 +68,7 @@ public:
     void pollEvent();
     void mouseInput(sf::Vector2i& mousePosition);
     
+
     bool isValidSrc(int turn);
     bool isValidDst(int turn);
     void turnMsg(int turn);
@@ -92,14 +96,19 @@ public:
     
     void saveToFile();
     void loadFromFile();
-    void undoBox(sf::RectangleShape& box, sf::Color bgCol);
+    void Box(sf::RectangleShape& box, sf::Color bgCol, std::string S, sf::Text& t, Position p);
     
-    void printUndo();
+    void printBoxes();
     void displayGame();
     
     
-    
-    
+    bool isWithinBox(Position p, Position p1, Position p2, Position p3, Position p4) {
+            
+        bool withinRRange = (p.R >= p1.R && p.R >= p2.R) && (p.R <= p3.R && p.R <= p4.R);
+        bool withinCRange = (p.C >= p1.C && p.C <= p2.C) && (p.C <= p3.C && p.C >= p4.C);
+        return withinRRange && withinCRange;
+    }
+
     
     bool checkmate(Position src){
         bool Hp[8][8];
@@ -163,7 +172,7 @@ public:
             b.highlightCheck(kP);
             b.drawBoard(window);
             b.drawBoardState(window);
-            printUndo();
+            printBoxes();
             window->display();
         }
     }
@@ -176,7 +185,7 @@ public:
 
         sf::Sprite welcomeSprite;
         welcomeSprite.setTexture(welcomeTexture);
-        
+        welcomeSprite.setScale(.83, .83);
         window.clear();
         window.draw(welcomeSprite);
         window.display();
@@ -185,10 +194,46 @@ public:
         while (true) {
             while (window.pollEvent(event)) {
                 if (event.type == sf::Event::KeyPressed) {
+                    window.clear();
                     return 0;
                 }
             }
         }
+    }
+
+    int displayNewLoadScreen(Position& p) {
+        sf::Texture saveTexture;
+        if (!saveTexture.loadFromFile("/Users/saranoor/Downloads/Xcode/Chess/newLoad.png")) {
+            std::cout << "error : load or new" << std::endl;
+            return 0;
+        }
+
+        sf::Sprite saveSprite;
+        saveSprite.setTexture(saveTexture);
+        saveSprite.setScale(.83f, .83f);
+        window->clear();
+        window->draw(saveSprite);
+        window->display();
+
+        sf::Event event;
+        bool coordinatesEntered = false;
+        
+
+        while (window->isOpen() && !coordinatesEntered) {
+            while (window->pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window->close();
+                    return 0;
+                } else if (event.type == sf::Event::MouseButtonPressed) {
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        p.R = event.mouseButton.x;
+                        p.C = event.mouseButton.y;
+                        coordinatesEntered = true;
+                    }
+                }
+            }
+        }
+        return 0;
     }
 
     
@@ -207,14 +252,31 @@ public:
     }
     
     void play(){
-        undoBox(undoButton, sf::Color::Yellow);
+        bool undoInitiated=false, Check, SelfCheck = false, gamePlaying = true, CheckMate, save = false, New;
+        char Undo = 'n', saveFile = 'n', loadFile = 'n';
+        Box(undoButton, sf::Color::Yellow, "Undo", uText, {900,10});
+        Box(saveButton, sf::Color::Cyan, "Save & Exit", sText, {900, 100});
         Position kP ;
         
+//        19     376, 396
+//        20     375, 490
+//        21     568, 490
+//        22     566, 395
+//        23     676, 395
+//        24     677, 489
+//        25     869, 491
+//        26     866, 399
         
-        bool undoInitiated=false, Check, SelfCheck = false, gamePlaying = true, CheckMate;
-        char Undo = 'n', saveFile = 'n', loadFile = 'n';
+        Position mouse;
+        displayWelcomeScreen(*window);
+        displayNewLoadScreen(mouse);
+        New = isWithinBox(mouse, {376, 396}, {375, 490}, {568, 490}, {566, 395});
+
+        window->clear();
         
-        if(loadFile == 'n'){
+      
+        
+        if(New){
             b.initBoardDisplay();
             b.createPieces();
             fake.createPieces();
@@ -222,7 +284,7 @@ public:
         else{
             loadFromFile();
         }
-        displayWelcomeScreen(*window);
+        
         displayGame();
         while(window->isOpen()){
            pollEvent();
@@ -232,16 +294,21 @@ public:
                     do{
                         do{
                             selectPos("Source",src);
-                            if(src.R == 0 && src.C == 9){
+                            if(src.R == 0 && src.C >= 9){
                                 undoInitiated = true;
                                 undo(moves);
                                 std::cout << "undo" << std::endl;
                                 displayGame();
                                 break;
                             }
+                            if(src.R == 1 && src.C >= 9){
+                                save = true;
+                                saveToFile();
+                                break;
+                            }
                         }while(!isValidSrc(turn));
                         
-                        if(undoInitiated)
+                        if(undoInitiated||save)
                             break;
                         
                         highlight(fake, src, HPs, turn);
@@ -253,7 +320,7 @@ public:
                         selectPos("Destination", dest);
                     }while(!isValidDst(turn));
                     
-                    if(undoInitiated)
+                    if(undoInitiated|| save)
                         break;
                     addToArray(moves, src, dest);
                     printMoves(moves);
@@ -261,6 +328,9 @@ public:
                     
                     //displayGame();
                 }while (!HPs[dest.R][dest.C]);
+                
+                if(save)
+                    break;
                 
                 if(!undoInitiated){
                     fake.move(src, dest);

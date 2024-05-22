@@ -39,6 +39,33 @@ public:
     void initBoardDisplay();
     
    
+    void initFilePieces(char pieceType, int r, int c,Color color){
+       static int rIdw,rIdb, kIdw,kIdb, qIdw,qIdb, hIdw, hIdb, bIdw, bIdb, pIdw, pIdb;
+        rIdw= rIdb = kIdb = kIdw = qIdb = qIdw = hIdw = hIdb = bIdb = bIdw= pIdb = pIdw =0;
+        
+        switch (pieceType) {
+               case 'p':
+                   Bs[r][c] = new Pawn(color, {r, c}, this, color == White ? pIdw++ : pIdb++);
+                   break;
+               case 'r':
+                   Bs[r][c] = new Rook(color, {r, c}, this, color == White ? rIdw++ : rIdb++);
+                   break;
+               case 'k':
+                   Bs[r][c] = new King(color, {r, c}, this, color == White ? kIdw++ : kIdb++);
+                   break;
+               case 'q':
+                   Bs[r][c] = new Queen(color, {r, c}, this, color == White ? qIdw++ : qIdb++);
+                   break;
+               case 'n':
+                   Bs[r][c] = new Knight(color, {r, c}, this, color == White ? hIdw++ : hIdb++);
+                   break;
+               case 'b':
+                   Bs[r][c] = new Bishop(color, {r, c}, this, color == White ? bIdw++ : bIdb++);
+                   break;
+               default:
+                   break;
+           }
+    }
    
 
     void highlightCheck(Position kP);

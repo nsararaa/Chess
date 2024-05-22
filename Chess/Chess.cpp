@@ -207,35 +207,38 @@ bool Chess::selfCheck(Board b){
 
 
 
-void Chess::undoBox(sf::RectangleShape& undo, sf::Color bgCol){
-    undo.setSize(sf::Vector2f(100,50.f));
-    undo.setPosition(900, 10);
+void Chess::Box(sf::RectangleShape& undo, sf::Color bgCol, std::string S, sf::Text& t, Position p){
+    undo.setSize(sf::Vector2f(150,50.f));
+    undo.setPosition(p.R, p.C);
     undo.setFillColor(bgCol);
     
     
-    text.setFont(font);
-    text.setString("Undo");
-    text.setCharacterSize(24);
-      text.setFillColor(sf::Color::Black);
-    text.setPosition(920, 20);
+    t.setFont(font);
+    t.setString(S);
+    t.setCharacterSize(24);
+      t.setFillColor(sf::Color::Black);
+    t.setPosition(p.R + 20, p.C +10);
 }
 
 
-void Chess::printUndo(){
+
+void Chess::printBoxes(){
     window->draw(undoButton);
-    window->draw(text);
+    window->draw(saveButton);
+    window->draw(uText);
+    window->draw(sText);
 }
 
 void Chess::displayGame(){
     b.drawBoard(window);
     b.drawBoardState(window);
-    printUndo();
+    printBoxes();
     window->display();
 }
 
 
 void Chess::addToArray(std::vector <Move> &moves, Position s, Position d){
-    if(s.R != 0 && s.C != 9) //undo coordinates
+    if((s.R != 0 && s.C < 9) || (s.R != 1 && s.C < 9)) //undo coordinates
         moves.push_back({s,d});
 }
 
@@ -262,54 +265,58 @@ void Chess::undo(std::vector <Move> &moves){
 
 
 
+void writePiece(Piece* piece, std::ofstream& Wtr) {
+    if (King* king = dynamic_cast<King*>(piece)) {
+        Wtr << 'k';
+    } else if (Queen* queen = dynamic_cast<Queen*>(piece)) {
+        Wtr << 'q';
+    } else if (Knight* knight = dynamic_cast<Knight*>(piece)) {
+        Wtr << 'n';
+    } else if (Bishop* bishop = dynamic_cast<Bishop*>(piece)) {
+        Wtr << 'b';
+    } else if (Rook* rook = dynamic_cast<Rook*>(piece)) {
+        Wtr << 'r';
+    } else if (Pawn* pawn = dynamic_cast<Pawn*>(piece)) {
+        Wtr << 'p';
+    }
+    
+}
 
 
 
 void Chess::saveToFile(){
     std::ofstream Wtr("/Users/saranoor/Downloads/Xcode/Chess/Chess/chessState.txt");
     
-    Knight *n;
-    Bishop *bi;
-    Rook *r;
-    King *k;
-    Queen *q;
-    Pawn *p;
-    
-    
-    
-        
-        
-    
-    
+ 
     for(int r=0; r < 8; r++){
         for(int c=0; c <8; c++){
             Piece* piece = b.pieceAt({r, c});
-            k = dynamic_cast<King*>(piece);
             if(piece != nullptr){
                 Position p = piece->getPosition();
-                Wtr << piece->getId() << " " << (piece->getColor()== Black?'B':'W') << " " << p.R << " "<< p.C << std::endl;
+                writePiece(piece, Wtr);
+                Wtr << " "<< piece->getId() << " " << (piece->getColor()== Black?'B':'W') << " " << p.R << " "<< p.C << std::endl;
             }
         }
     }
     
 }
-void Chess::loadFromFile(){
+void Chess::loadFromFile() {
     std::ifstream Rdr("/Users/saranoor/Downloads/Xcode/Chess/Chess/chessState.txt");
-    
-    
-    while(Rdr){
-        Color color;
-        char col;
-        int id;
-        Position p;
-        Rdr >> id;
-        Rdr >> col;
-        Rdr >> p.R;
-        Rdr >> p.C;
-        Piece *piece = b.pieceAt(p);
+    if (!Rdr) {
+        std::cerr << "Error opening file for reading" << std::endl;
+        return;
+    }
+
+    char pieceType;
+    int id, row, col;
+    char colorChar;
+    Color c;
+    while (Rdr) {
+        Rdr >> pieceType >> id >> colorChar >> row >> col;
+        c = (colorChar == 'B') ? Black : White;
+        Position pos{row, col};
         
-        piece->setId(id);
-        piece->setColor(col == 'B'? Black:White);
-        piece->setPos(p);
+        b.initFilePieces(pieceType, row, col, c);
     }
 }
+
