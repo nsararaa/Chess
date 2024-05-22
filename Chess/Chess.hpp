@@ -24,7 +24,7 @@ class Chess{
     Player* Ps[2];
     Position src, dest;
     int turn;
-    Board b;
+    Board b, fake;
     bool HPs[8][8] {};
     
     
@@ -81,7 +81,7 @@ public:
     bool check(Board b, int turn);
     bool isValidSrc(Position src, int turn);
     
-    bool selfCheck();
+    bool selfCheck(Board b);
 
   
    
@@ -107,23 +107,26 @@ public:
             for(int r=0; r < 8; r++){
                 for(int c=0; c < 8; c++){
 
-                    
-                    if(b.pieceAt({r, c}) !=nullptr){
-                        highlight(b, {r,c}, Hp, turn);
-                        if(b.pieceAt({r, c})->getColor() == turn){
-                            
-                            
+                    if(fake.pieceAt({r, c}) !=nullptr){
+                        highlight(fake, {r,c}, Hp, turn);
+                        if(fake.pieceAt({r, c})->getColor() == turn){
+
                             for(int rI=0; rI < 8; rI++){
                                 for(int cI=0; cI < 8; cI++){
                                     if(Hp[rI][cI]){
-                                        Board copyBoard = b;
-                                       // highlight(copyBoard, {r,c}, Hp, turn);
                                         printHighlightConsole(Hp);
                                         std::cout << std::endl;
-                                       // copyBoard.move({r, c}, {rI, cI});
 
-                                        turnChange(turn);
-                                        return false;
+                                        
+                                        if(check(fake, turn)){
+                                            
+                                        }
+                                        else{
+                                            turnChange(turn);
+                                            return false;
+                                        }
+                                            
+                                    
                                     }
                                 }
                             }
@@ -141,7 +144,7 @@ public:
         
         for(int r=0; r < 8; r++){
             for(int c =0; c < 8; c++){
-                if(b.pieceAt(src)->isLegal({r,c}) )
+                if(fake.pieceAt(src)->isLegal({r,c}) )
                     return true;
             }
         }
@@ -149,98 +152,156 @@ public:
     }
   
     
+    void printCheck(bool Check, Position kP){
+        if(Check){
+            std::cout << "Check" << std::endl;
+            turnChange(turn);
+            kP = findKing(b, turn);
+            turnChange(turn);
+            Check = true;
+            
+            b.highlightCheck(kP);
+            b.drawBoard(window);
+            b.drawBoardState(window);
+            printUndo();
+            window->display();
+        }
+    }
+    int displayWelcomeScreen(sf::RenderWindow& window) {
+        sf::Texture welcomeTexture;
+        if (!welcomeTexture.loadFromFile("/Users/saranoor/Downloads/Xcode/Chess/welcome.png")) {
+            std::cout << "error: welcome.png" << std::endl;
+            return 0;
+        }
+
+        sf::Sprite welcomeSprite;
+        welcomeSprite.setTexture(welcomeTexture);
+        
+        window.clear();
+        window.draw(welcomeSprite);
+        window.display();
+
+        sf::Event event;
+        while (true) {
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::KeyPressed) {
+                    return 0;
+                }
+            }
+        }
+    }
+
+    
+    void displayGameOverScreen() {
+        sf::Text gameOverText;
+        gameOverText.setFont(font);
+        gameOverText.setString("Game Over");
+        gameOverText.setCharacterSize(50);
+        gameOverText.setFillColor(sf::Color::Cyan);
+        gameOverText.setPosition(window->getSize().x / 2 - gameOverText.getGlobalBounds().width / 2,
+                                 window->getSize().y / 2 - gameOverText.getGlobalBounds().height / 2);
+
+        window->clear();
+        window->draw(gameOverText);
+        window->display();
+    }
+    
     void play(){
         undoBox(undoButton, sf::Color::Yellow);
         Position kP ;
         
-        bool undoInitiated=false,s, Check;
+        
+        bool undoInitiated=false, Check, SelfCheck = false, gamePlaying = true, CheckMate;
         char Undo = 'n', saveFile = 'n', loadFile = 'n';
         
         if(loadFile == 'n'){
             b.initBoardDisplay();
             b.createPieces();
+            fake.createPieces();
         }
         else{
             loadFromFile();
         }
-        
+        displayWelcomeScreen(*window);
         displayGame();
         while(window->isOpen()){
            pollEvent();
-            turnMsg(turn);
-            
-            do{
+            if(gamePlaying){
+                turnMsg(turn);
                 do{
                     do{
-                        selectPos("Source",src);
-                        if(src.R == 0 && src.C == 9){
-                            undoInitiated = true;
-                            undo(moves);
-                            std::cout << "undo" << std::endl;
-                            displayGame();
+                        do{
+                            selectPos("Source",src);
+                            if(src.R == 0 && src.C == 9){
+                                undoInitiated = true;
+                                undo(moves);
+                                std::cout << "undo" << std::endl;
+                                displayGame();
+                                break;
+                            }
+                        }while(!isValidSrc(turn));
+                        
+                        if(undoInitiated)
                             break;
-                        }
-                    }while(!isValidSrc(turn));
-                    
-                    if(undoInitiated)
-                        break;
-                    
-                        highlight(b, src, HPs, turn);
+                        
+                        highlight(fake, src, HPs, turn);
                         printHighlightConsole(HPs);
                         b.printHighlightWindow(HPs);
                         
+                        displayGame();
+                        
+                        selectPos("Destination", dest);
+                    }while(!isValidDst(turn));
+                    
+                    if(undoInitiated)
+                        break;
+                    addToArray(moves, src, dest);
+                    printMoves(moves);
+                    b.unhighlight(HPs);
+                    
+                    //displayGame();
+                }while (!HPs[dest.R][dest.C]);
+                
+                if(!undoInitiated){
+                    fake.move(src, dest);
+                    
+                    SelfCheck = selfCheck(fake);
+                    if(SelfCheck){
+                        std::cout << "Selfcheck" << std::endl;
+                        Move lastMove = moves.back();
+                        fake.move(lastMove.dst, lastMove.src);
+                    }
+                    else
+                        b.move(src,dest);
+                    
+                    Check = check(fake, turn);
+                    printCheck(Check, kP);
                     displayGame();
                     
-                        selectPos("Destination", dest);
-                }while(!isValidDst(turn));
-                
-                if(undoInitiated)
-                    break;
-                addToArray(moves, src, dest);
-                printMoves(moves);
-                b.unhighlight(HPs);
-
-                //displayGame();
-            }while (!HPs[dest.R][dest.C]);
-
-            if(!undoInitiated){
-                b.move(src, dest);
-                
-            if(selfCheck()){
-                std::cout << "Selfcheck" << std::endl;
-                undo(moves);
-                std::cout << "undo" << std::endl;
-            }
-                
-            Check = check(b, turn);
-                
-            if(Check){
-                std::cout << "Check" << std::endl;
-                turnChange(turn);
-                kP = findKing(b, turn);
-                turnChange(turn);
-                Check = true;
-                
-                b.highlightCheck(kP);
-                b.drawBoard(window);
-                b.drawBoardState(window);
-                printUndo();
-                window->display();
-            }
-
-                displayGame();
-
-                turnChange(turn);
-            }
-            undoInitiated = false;
-            if (Check){
-                if (checkmate(src) ) {
-                    std::cout << "Checkmate \nGame over." << std::endl;
-                    window->close();
-
+                    if(!SelfCheck)
+                        turnChange(turn);
                 }
+                
+                undoInitiated = false;
+                if (Check){
+                    CheckMate =checkmate(src);
+                    if (CheckMate) {
+                        std::cout << "Checkmate \nGame over." << std::endl;
+                        gamePlaying = false;
+                        //break;
+                    }
+                }
+                
+                b.unhighlightCheck(kP);
             }
-            b.unhighlightCheck(kP);
+            else{
+                sf::sleep(sf::seconds(1));
+                displayGameOverScreen();
+                sf::sleep(sf::seconds(1));
+                break;
+            }
+        
+            
         }
         
     }

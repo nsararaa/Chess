@@ -24,6 +24,7 @@ class Rook:public Piece{
 protected:
     void draw(sf::RenderWindow* window, int id);
 public:
+    
     Rook(Color _col,Position _p, Board * _b, int _id): Piece(_col, _p, _id), b(_b){
         init();
     }

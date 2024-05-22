@@ -22,6 +22,7 @@ class Bishop: public Piece{
 protected:
     void draw(sf::RenderWindow* window, int id);
 public:
+    
     Bishop(Color _col,Position _p, Board * _b, int _id):b(_b), Piece(_col,_p,_id){
         init();
     }

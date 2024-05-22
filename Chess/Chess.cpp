@@ -147,6 +147,7 @@ bool Chess::check(Board b, int turn){
 void Chess::highlight(Board b, Position src, bool HPs[][8], int turn){
     for(int r=0; r < 8; r++){
         for(int c=0; c < 8; c++){
+          
             
             if(b.pieceAt({r,c}) != nullptr) //square is occupied //check for opposite clr
                 HPs[r][c] = (b.pieceAt(src)->isLegal({r,c}) && b.pieceAt({r,c})->getColor()!= turn);
@@ -197,7 +198,7 @@ bool Chess::isValidSrc(Position src, int turn){
 
 int i =0;
 
-bool Chess::selfCheck(){
+bool Chess::selfCheck(Board b){
     turnChange(turn);
     bool sc = check(b,turn);
     turnChange(turn);
@@ -266,9 +267,24 @@ void Chess::undo(std::vector <Move> &moves){
 
 void Chess::saveToFile(){
     std::ofstream Wtr("/Users/saranoor/Downloads/Xcode/Chess/Chess/chessState.txt");
+    
+    Knight *n;
+    Bishop *bi;
+    Rook *r;
+    King *k;
+    Queen *q;
+    Pawn *p;
+    
+    
+    
+        
+        
+    
+    
     for(int r=0; r < 8; r++){
         for(int c=0; c <8; c++){
             Piece* piece = b.pieceAt({r, c});
+            k = dynamic_cast<King*>(piece);
             if(piece != nullptr){
                 Position p = piece->getPosition();
                 Wtr << piece->getId() << " " << (piece->getColor()== Black?'B':'W') << " " << p.R << " "<< p.C << std::endl;

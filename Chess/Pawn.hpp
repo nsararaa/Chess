@@ -29,6 +29,7 @@ protected:
     }
     
 public:
+    
     Pawn(Color _col,Position _p, Board* _b, int _id): b(_b),isFirstMove(true), Piece(_col, _p, _id){
         init();
     }
