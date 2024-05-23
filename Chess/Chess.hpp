@@ -102,155 +102,18 @@ public:
     void displayGame();
     
     
-    bool isWithinBox(Position p, Position p1, Position p2, Position p3, Position p4) {
-            
-        bool withinRRange = (p.R >= p1.R && p.R >= p2.R) && (p.R <= p3.R && p.R <= p4.R);
-        bool withinCRange = (p.C >= p1.C && p.C <= p2.C) && (p.C <= p3.C && p.C >= p4.C);
-        return withinRRange && withinCRange;
-    }
+    bool isWithinBox(Position p, Position p1, Position p2, Position p3, Position p4);
 
     
-    bool checkmate(Position src){
-        bool Hp[8][8];
-        turnChange(turn);
-            for(int r=0; r < 8; r++){
-                for(int c=0; c < 8; c++){
-
-                    if(fake.pieceAt({r, c}) !=nullptr){
-                        highlight(fake, {r,c}, Hp, turn);
-                        if(fake.pieceAt({r, c})->getColor() == turn){
-
-                            for(int rI=0; rI < 8; rI++){
-                                for(int cI=0; cI < 8; cI++){
-                                    if(Hp[rI][cI]){
-                                        printHighlightConsole(Hp);
-                                        std::cout << std::endl;
-
-                                        
-                                        if(check(fake, turn)){
-                                            
-                                        }
-                                        else{
-                                            turnChange(turn);
-                                            return false;
-                                        }
-                                            
-                                    
-                                    }
-                                }
-                            }
-                            
-                            
-                        }
-                    }
-                }
-            }
-            return true;
-}
-
-
-    bool stalemate(){
-        
-        for(int r=0; r < 8; r++){
-            for(int c =0; c < 8; c++){
-                if(fake.pieceAt(src)->isLegal({r,c}) )
-                    return true;
-            }
-        }
-        return false;
-    }
+    bool checkmate(Position src);
+    bool stalemate();
   
     
-    void printCheck(bool Check, Position kP){
-        if(Check){
-            std::cout << "Check" << std::endl;
-            turnChange(turn);
-            kP = findKing(b, turn);
-            turnChange(turn);
-            Check = true;
-            
-            b.highlightCheck(kP);
-            b.drawBoard(window);
-            b.drawBoardState(window);
-            printBoxes();
-            window->display();
-        }
-    }
-    int displayWelcomeScreen(sf::RenderWindow& window) {
-        sf::Texture welcomeTexture;
-        if (!welcomeTexture.loadFromFile("/Users/saranoor/Downloads/Xcode/Chess/welcome.png")) {
-            std::cout << "error: welcome.png" << std::endl;
-            return 0;
-        }
-
-        sf::Sprite welcomeSprite;
-        welcomeSprite.setTexture(welcomeTexture);
-        welcomeSprite.setScale(.83, .83);
-        window.clear();
-        window.draw(welcomeSprite);
-        window.display();
-
-        sf::Event event;
-        while (true) {
-            while (window.pollEvent(event)) {
-                if (event.type == sf::Event::KeyPressed) {
-                    window.clear();
-                    return 0;
-                }
-            }
-        }
-    }
-
-    int displayNewLoadScreen(Position& p) {
-        sf::Texture saveTexture;
-        if (!saveTexture.loadFromFile("/Users/saranoor/Downloads/Xcode/Chess/newLoad.png")) {
-            std::cout << "error : load or new" << std::endl;
-            return 0;
-        }
-
-        sf::Sprite saveSprite;
-        saveSprite.setTexture(saveTexture);
-        saveSprite.setScale(.83f, .83f);
-        window->clear();
-        window->draw(saveSprite);
-        window->display();
-
-        sf::Event event;
-        bool coordinatesEntered = false;
-        
-
-        while (window->isOpen() && !coordinatesEntered) {
-            while (window->pollEvent(event)) {
-                if (event.type == sf::Event::Closed) {
-                    window->close();
-                    return 0;
-                } else if (event.type == sf::Event::MouseButtonPressed) {
-                    if (event.mouseButton.button == sf::Mouse::Left) {
-                        p.R = event.mouseButton.x;
-                        p.C = event.mouseButton.y;
-                        coordinatesEntered = true;
-                    }
-                }
-            }
-        }
-        return 0;
-    }
-
+    void printCheck(bool Check, Position kP);
+    int displayWelcomeScreen(sf::RenderWindow& window);
+    int displayNewLoadScreen(Position& p);
     
-    void displayGameOverScreen() {
-        sf::Text gameOverText;
-        gameOverText.setFont(font);
-        gameOverText.setString("Game Over");
-        gameOverText.setCharacterSize(50);
-        gameOverText.setFillColor(sf::Color::Cyan);
-        gameOverText.setPosition(window->getSize().x / 2 - gameOverText.getGlobalBounds().width / 2,
-                                 window->getSize().y / 2 - gameOverText.getGlobalBounds().height / 2);
-
-        window->clear();
-        window->draw(gameOverText);
-        window->display();
-    }
-    
+    void displayGameOverScreen();
     void play(){
         bool undoInitiated=false, Check, SelfCheck = false, gamePlaying = true, CheckMate, save = false, New;
         char Undo = 'n', saveFile = 'n', loadFile = 'n';
@@ -275,17 +138,18 @@ public:
         window->clear();
         
       
-        
+        b.initBoardDisplay();
         if(New){
-            b.initBoardDisplay();
             b.createPieces();
             fake.createPieces();
+           
         }
         else{
             loadFromFile();
+           
         }
-        
         displayGame();
+        
         while(window->isOpen()){
            pollEvent();
             if(gamePlaying){
